@@ -132,6 +132,7 @@ var vueInstance = new Vue({
 
         // Themes begin
         am4core.useTheme(am4themes_animated);
+        am4core.addLicense("ch-custom-attribution");
         // Themes end
 
         var chartMin = self.settings.minValue !== undefined ? self.settings.minValue : self.widgetConfig.chartMin;
