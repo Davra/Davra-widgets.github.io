@@ -1,6 +1,7 @@
 <html>
 
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-coy.css" integrity="sha512-yoghUvbzNlkBv1rS/CrImccfRINP9gYAKqq68he/XN6xEDhTuqmUE/7+Njmmh8sY3DDUAkMScPXNo1PkKvVRbg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link
       href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
       rel="stylesheet"
@@ -84,12 +85,23 @@
         </v-col>
         </v-row>
         <h2>Chart Grading Data</h2>
+        <v-row dense >
+            <v-col
+     cols="12"
+     sm="8">
+        <pre>
+            <code>
+             {{ gradingData }}
+            </code>
+          </pre>
+            </v-col>
+        </v-row>
         <h2>Widget Level Query</h2>
         <v-row dense style="margin-top: 25px; ">
             
     <v-col
      cols="12"
-     sm="3">
+     sm="5">
      <v-select :items="devices" id="device" outlined style="width:100%" v-model="device" disabled>
     </v-select>
 </v-col>
@@ -135,7 +147,7 @@
     </v-col>
     <v-col
      cols="12"
-     sm="2"
+     sm="4"
     >
       <v-select :items="times" id="time" outlined style="width:100%" v-model="time" disabled></v-select>
     </v-col>
@@ -151,9 +163,9 @@
     </v-col>
     <v-col
      cols="12"
-     sm="6"
+     sm="4"
     >
-    <v-select :items="numbers" id="number" outlined style="width:35%" v-model="number" disabled>
+    <v-select :items="numbers" id="number" outlined style="width:100%" v-model="number" disabled>
           </v-select>
         </v-col>
         </v-row>
@@ -161,11 +173,19 @@
     </v-app>
   </div>
  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js" integrity="sha512-axJX7DJduStuBB8ePC8ryGzacZPr3rdLaIDZitiEgWWk2gsXxEFlm4UW0iNzj2h3wp5mOylgHAzBzM4nRSvTZA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
    
     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
      <script src="demoSettings.js"></script>
+     <style>pre code {
+        background-color: #eee;
+        border: 1px solid #999;
+        display: block;
+        padding: 20px;
+      }</style>
 </body>
 
 </html>
