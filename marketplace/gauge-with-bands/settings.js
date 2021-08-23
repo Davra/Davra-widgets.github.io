@@ -42,11 +42,12 @@ try {
                 $("#divUserFeedback").html("Error encountered while loading configuration ", err);
                 return;
             }
+            
 
-            document.getElementById('minvalue').value = widgetConfigData.minValue ? widgetConfigData.minValue : -50
-            document.getElementById('maxvalue').value = widgetConfigData.maxValue ? widgetConfigData.maxValue : 100
-            selectElement('fontsize', widgetConfigData.fontsize ? widgetConfigData.fontsize : 11)
-            selectElement('radius', widgetConfigData.innerRadius ? widgetConfigData.innerRadius : 80)
+            widgetConfigData.minValue = widgetConfigData.minValue ? widgetConfigData.minValue : -50
+            widgetConfigData.maxValue = widgetConfigData.maxValue ? widgetConfigData.maxValue : 100
+            widgetConfigData.fontsize =  widgetConfigData.fontsize ? widgetConfigData.fontsize : 11
+            widgetConfigData.innerRadius = widgetConfigData.innerRadius ? widgetConfigData.innerRadius : 80
 
             // Attach the plugins to known settings DOM elements and set to the current configuration
             $('#deviceselector').deviceSelector({
@@ -122,10 +123,6 @@ var saveWidgetSettings = function () {
     });
 }
 
-function selectElement(id, valueToSelect) {
-    let element = document.getElementById(id);
-    element.value = valueToSelect;
-}
 
 
 // Default gradingData

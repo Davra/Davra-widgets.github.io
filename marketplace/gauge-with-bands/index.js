@@ -99,6 +99,7 @@ var vueInstance = new Vue({
   mounted() {
 
     this.$on("update", function (settings) {
+      this.settings = settings;
       this.widgetConfig = widgetConfig;
       if (settings.chartCfg !== null) {
         this.ranges = settings.chartCfg
@@ -106,9 +107,9 @@ var vueInstance = new Vue({
         this.ranges = data.gradingData
       }
       if (settings.deviceId !== null && settings.metrics !== null && settings.timerange !== null) {
-        this.settings = settings;
         this.getData(this.settings)
       } else {
+        previewMode = true;
         this.dataPoints = sampleData;
       }
 
@@ -133,17 +134,16 @@ var vueInstance = new Vue({
         am4core.useTheme(am4themes_animated);
         // Themes end
 
-        var chartMin = !previewMode ? self.settings.minValue : self.widgetConfig.chartMin;
-        var chartMax = !previewMode ? self.settings.maxValue : self.widgetConfig.chartMax;
+        var chartMin = self.settings.minValue !== undefined ? self.settings.minValue : self.widgetConfig.chartMin;
+        var chartMax = self.settings.maxValue !== undefined ? self.settings.maxValue : self.widgetConfig.chartMax;
 
-        console.log(self.widgetConfig.chartCfg)
         /**
         Grading Lookup
          */
         function lookUpGrade(lookupScore, grades) {
           // Only change code below this line
           for (var i = 0; i < grades.length; i++) {
-            if (
+            if ( 
               grades[i].lowScore < lookupScore &&
               grades[i].highScore >= lookupScore
             ) {
@@ -156,8 +156,8 @@ var vueInstance = new Vue({
         // create chart
         var chart = am4core.create("chartdiv", am4charts.GaugeChart);
         chart.hiddenState.properties.opacity = 0;
-        chart.fontSize = !previewMode ? self.settings.fontsize : self.widgetConfig.fontsize;
-        chart.innerRadius = am4core.percent(!previewMode ? self.settings.innerRadius : self.widgetConfig.innerRadius);
+        chart.fontSize = self.settings.fontsize !== undefined ? self.settings.fontsize : self.widgetConfig.fontsize;
+        chart.innerRadius = am4core.percent(self.settings.innerRadius !== undefined ? self.settings.innerRadius : self.widgetConfig.innerRadius);
         chart.resizable = true;
 
         /**
