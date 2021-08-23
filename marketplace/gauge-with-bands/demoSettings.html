@@ -1,0 +1,167 @@
+<html>
+
+<head>
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css"
+      rel="stylesheet"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui"
+    />
+</head>
+
+<body>
+    
+    <div id="app">
+    <v-app>
+        <v-container class="mx-8"> 
+            <h2>Widget Configuration</h2>
+        <v-row dense style="margin-top: 25px; ">
+            <v-col
+     cols="12"
+     sm="3">
+        <h4>Maximum Widget Value:</h4>
+    </v-col>
+    <v-col
+     cols="12"
+     sm="9">
+      <v-text-field
+        placeholder="Maximum Widget Value"
+        outlined
+        :value="maxChartValue"
+        style="width:35%"
+        id="maxvalue"
+        ></v-text-field> 
+        </v-col>
+            <v-col
+     cols="12"
+     sm="3">
+        <h4>Minimum Widget Value:</h4>
+    </v-col>
+    <v-col
+     cols="12"
+     sm="9">
+      <v-text-field
+        placeholder="Minimum Widget Value"
+        outlined
+        :value="minChartValue"
+        style="width:35%"
+        id="minvalue"
+        ></v-text-field>
+        </v-col>
+        <v-col
+     cols="12"
+     sm="3">
+        <h4>Font size:</h4>
+    </v-col>
+    <v-col
+     cols="12"
+     sm="9">
+      <v-select :items="fonts" id="fontsize" outlined style="width:35%" v-model="fontsize">
+          </v-select>
+        </v-col>
+         <v-col
+     cols="12"
+     sm="3">
+        <h4>Inner Radius:</h4>
+    </v-col>
+    <v-col
+     cols="12"
+     sm="9">
+      <v-select :items="radii" id="radius" outlined style="width:35%" v-model="innerRadius">
+          </v-select>
+        </v-col>
+        </v-row>
+        <h2>Chart Grading Data</h2>
+        <h2>Widget Level Query</h2>
+        <v-row dense style="margin-top: 25px; ">
+            
+    <v-col
+     cols="12"
+     sm="3">
+     <v-select :items="devices" id="device" outlined style="width:100%" v-model="device">
+    </v-select>
+</v-col>
+    <v-col
+     cols="12"
+     sm="6">
+    <v-text-field     
+        outlined
+        prepend-inner-icon="mdi-calendar"
+        value="2021-08-22 14:10 - 2021-08-23 14:10"
+        style="width:75%"
+        ></v-text-field>
+        </v-col>
+        </v-row>
+        <h2>Metrics</h2>
+        <v-row dense style="margin-top: 25px; ">
+            <v-col
+     cols="12"
+     sm="3">
+        <h4>Metric:</h4>
+    </v-col>
+    <v-col
+     cols="12"
+     sm="9">
+     <v-select :items="metrics" id="metric" outlined style="width:35%" v-model="metric">
+    </v-select>
+        </v-col>
+            <v-col
+     cols="12"
+     sm="3">
+        <h4>Group By:</h4>
+    </v-col>
+    <v-col
+     cols="12"
+     sm="9">
+     <v-select :items="groupBys" id="group" outlined style="width:35%" v-model="groupBy">
+        </v-col>
+        <v-col
+     cols="12"
+     sm="3">
+        <h4>Time Buckets:</h4>
+    </v-col>
+    <v-col
+     cols="12"
+     sm="2"
+    >
+      <v-select :items="times" id="time" outlined style="width:100%" v-model="time"></v-select>
+    </v-col>
+    <v-col
+    cols="12"
+    sm="1"
+   >
+      <v-text-field     
+        outlined
+        value=5
+        ></v-text-field>
+    </v-col>
+    <v-col
+     cols="12"
+     sm="6"
+    >
+    <v-select :items="numbers" id="number" outlined style="width:35%" v-model="number">
+          </v-select>
+        </v-col>
+        </v-row>
+        </v-container>
+    </v-app>
+  </div>
+ 
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+   
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+     <script src="demoSettings.js"></script>
+</body>
+
+</html>
