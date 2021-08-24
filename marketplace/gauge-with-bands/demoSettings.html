@@ -49,13 +49,14 @@
             <h3>Chart Grading Data</h3>
           </v-col>
 
-          <v-col cols="12" sm="12">
+          <v-col cols="12" sm="8">
             <pre>
             <code class="language-javascript"><!--
             -->{{gradingData}}<!---->
             </code>
-          </pre>
+          </pre>    
           </v-col>
+          <v-col cols="12" sm="4"></v-col>
           <v-col cols="12" sm="12">
 
             <h3>Widget Level Query</h3>
@@ -66,10 +67,11 @@
             <v-select :items="devices" id="device" outlined style="width:100%" v-model="device" dense disabled>
             </v-select>
           </v-col>
-          <v-col cols="12" sm="8">
+          <v-col cols="12" sm="4">
             <v-text-field disabled outlined prepend-inner-icon="mdi-calendar" dense
-              value="2021-08-22 14:10 - 2021-08-23 14:10" style="width:50%"></v-text-field>
+              value="2021-08-22 14:10 - 2021-08-23 14:10" ></v-text-field>
           </v-col>
+          <v-col cols="12" sm="4"></v-col>
           <v-col cols="12" sm="12">
 
             <h3>Metrics</h3>
