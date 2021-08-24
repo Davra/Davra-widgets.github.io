@@ -1,6 +1,5 @@
 <html>
-
-<head>
+  <head>
     <link
       href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
       rel="stylesheet"
@@ -17,128 +16,125 @@
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui"
     />
-</head>
+  </head>
 
-<body>
+  <body>
     <!-- Basic inclusions to support the settings for widgets -->
     <script src="/ui/vendors/jquery/dist/jquery.min.js"></script>
     <script src="/ui/assets/widget-utilities.js"></script>
-  <div class="settings-page accordion">
-         <div class="panel">
-            <a class="panel-heading widget-accordion">
-                <p>Widget Configuration</p>
-                <i class="fa fa-sort-asc accordion-indicator" aria-hidden="true"></i>
-            </a>
-    
-    <div id="app">
-    <v-app>
-        <v-container class="mx-8"> 
-        <v-row dense style="margin-top: 25px; ">
-            <v-col
-     cols="12"
-     sm="3">
-        <h4>Maximum Widget Value:</h4>
-    </v-col>
-    <v-col
-     cols="12"
-     sm="9">
-      <v-text-field
-        placeholder="Maximum Widget Value"
-        outlined
-        :value="maxChartValue"
-        style="width:35%"
-        id="maxvalue"
-        ></v-text-field> 
-        </v-col>
-            <v-col
-     cols="12"
-     sm="3">
-        <h4>Minimum Widget Value:</h4>
-    </v-col>
-    <v-col
-     cols="12"
-     sm="9">
-      <v-text-field
-        placeholder="Minimum Widget Value"
-        outlined
-        :value="minChartValue"
-        style="width:35%"
-        id="minvalue"
-        ></v-text-field>
-        </v-col>
-        <v-col
-     cols="12"
-     sm="3">
-        <h4>Font size:</h4>
-    </v-col>
-    <v-col
-     cols="12"
-     sm="9">
-      <v-select :items="fonts" id="fontsize" outlined style="width:35%" v-model="fontsize">
-          </v-select>
-        </v-col>
-         <v-col
-     cols="12"
-     sm="3">
-        <h4>Inner Radius:</h4>
-    </v-col>
-    <v-col
-     cols="12"
-     sm="9">
-      <v-select :items="radii" id="radius" outlined style="width:35%" v-model="innerRadius">
-          </v-select>
-        </v-col>
-        </v-row>
-        </v-container>
-    </v-app>
-  </div>
- 
+    <div class="settings-page accordion">
+      <div class="panel" style="margin-bottom: 10px">
+        <a class="panel-heading widget-accordion">
+          <p>Widget Configuration</p>
+          <i class="fa fa-sort-asc accordion-indicator" aria-hidden="true"></i>
+        </a>
 
+        <div id="app" style="max-height: 420px">
+          <v-app>
+            <v-container class="mx-8">
+              <v-row dense style="margin-top: 25px">
+                <v-col cols="12" sm="3">
+                  <h4>Maximum Widget Value:</h4>
+                </v-col>
+                <v-col cols="12" sm="9">
+                  <v-text-field
+                    placeholder="Maximum Widget Value"
+                    outlined
+                    :value="maxChartValue"
+                    style="width: 35%"
+                    id="maxvalue"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="3">
+                  <h4>Minimum Widget Value:</h4>
+                </v-col>
+                <v-col cols="12" sm="9">
+                  <v-text-field
+                    placeholder="Minimum Widget Value"
+                    outlined
+                    :value="minChartValue"
+                    style="width: 35%"
+                    id="minvalue"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="3">
+                  <h4>Font size:</h4>
+                </v-col>
+                <v-col cols="12" sm="9">
+                  <v-select
+                    :items="fonts"
+                    id="fontsize"
+                    outlined
+                    style="width: 35%"
+                    v-model="fontsize"
+                  >
+                  </v-select>
+                </v-col>
+                <v-col cols="12" sm="3">
+                  <h4>Inner Radius:</h4>
+                </v-col>
+                <v-col cols="12" sm="9">
+                  <v-select
+                    :items="radii"
+                    id="radius"
+                    outlined
+                    style="width: 35%"
+                    v-model="innerRadius"
+                  >
+                  </v-select>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-app>
+        </div>
+      </div>
 
-  
-  <!-- Settings HTML for regular AmCharts configuration -->
-         <div class="panel">
-            <a class="panel-heading widget-accordion">
-                <p>Chart Grading Data</p>
-                <i class="fa fa-sort-asc accordion-indicator" aria-hidden="true"></i>
-            </a>
-            <div class="panel-body">
-                <div id="text-editor-for-ace" class="settings-text-editor-for-ace"></div>
-            </div>
+      <!-- Settings HTML for regular AmCharts configuration -->
+      <div class="panel">
+        <a class="panel-heading widget-accordion">
+          <p>Chart Grading Data</p>
+          <i class="fa fa-sort-asc accordion-indicator" aria-hidden="true"></i>
+        </a>
+        <div class="panel-body">
+          <div
+            id="text-editor-for-ace"
+            class="settings-text-editor-for-ace"
+          ></div>
         </div>
-        <div class="panel">
-            <a class="panel-heading widget-accordion">
-                <p>Widget Level Query</p>
-                <i class="fa fa-sort-asc accordion-indicator" aria-hidden="true"></i>
-            </a>
-            <div class="panel-body">
-                <ul class="settings-inline-ul">
-                    <li id="deviceselector"></li>
-                    <li id="timerangeselector"></li>
-                </ul>
-            </div>
+      </div>
+      <div class="panel">
+        <a class="panel-heading widget-accordion">
+          <p>Widget Level Query</p>
+          <i class="fa fa-sort-asc accordion-indicator" aria-hidden="true"></i>
+        </a>
+        <div class="panel-body">
+          <ul class="settings-inline-ul">
+            <li id="deviceselector"></li>
+            <li id="timerangeselector"></li>
+          </ul>
         </div>
-        <div class="panel">
-            <a class="panel-heading widget-accordion">
-                <p>Metrics</p>
-                <i class="fa fa-sort-asc accordion-indicator" aria-hidden="true"></i>
-            </a>
-            <div class="panel-body">
-                <div id="metricsselector"></div>
-            </div>
+      </div>
+      <div class="panel">
+        <a class="panel-heading widget-accordion">
+          <p>Metrics</p>
+          <i class="fa fa-sort-asc accordion-indicator" aria-hidden="true"></i>
+        </a>
+        <div class="panel-body">
+          <div id="metricsselector"></div>
         </div>
-        <div id="divUserFeedback"></div>
-        <div style="text-align: right;">
-            <br />
-            <button id="buttonSaveWidgetSettings" class="btn btn-primary">Apply Settings</button>
-        </div>
-    </div>
+      </div>
+      <div id="divUserFeedback"></div>
+      <div style="text-align: right">
+        <br />
+        <button id="buttonSaveWidgetSettings" class="btn btn-primary">
+          Apply Settings
+        </button>
+      </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
-   
-    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-     <script src="settings.js"></script>
-</body>
 
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="settings.js"></script>
+  </body>
 </html>

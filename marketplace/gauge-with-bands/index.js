@@ -1,4 +1,3 @@
-var supercontext;
 var deviceUUID;
 var previewMode = false;
 var productionMode = false;
@@ -90,16 +89,16 @@ var vueInstance = new Vue({
     dataPoints(newVal, oldVal) {
       console.log(newVal, oldVal)
       if (this.hand && !previewMode) {
-          if(newVal.length === 0){
-         this.score = this.settings.maxValue
-        this.timestamp = "NO DATA AVAILABLE FOR DEVICE"
-        this.hand.showValue(this.settings.maxValue, 1000, am4core.ease.cubicOut)
-              
-         }else{
-        this.score = newVal[0][1]
-        this.timestamp = new Date(newVal[0][0]).toString()
-        this.hand.showValue(newVal[0][1], 1000, am4core.ease.cubicOut)
-         } 
+        if (newVal.length === 0) {
+          this.score = this.settings.maxValue
+          this.timestamp = "NO DATA AVAILABLE FOR DEVICE"
+          this.hand.showValue(this.settings.maxValue, 1000, am4core.ease.cubicOut)
+
+        } else {
+          this.score = newVal[0][1]
+          this.timestamp = new Date(newVal[0][0]).toString()
+          this.hand.showValue(newVal[0][1], 1000, am4core.ease.cubicOut)
+        }
       }
     }
   },
@@ -114,12 +113,12 @@ var vueInstance = new Vue({
         this.ranges = data.gradingData
       }
       if (settings.deviceId !== null || settings.metrics !== null) {
-        if(settings.timerange && settings.metric && settings.deviceid !== null){
-        this.getData(this.settings)
-        }else{
-            this.datapoints = [[0,0]]
-            this.timestamp = "NO DATA AVAILABLE"
-     
+        if (settings.timerange && settings.metric && settings.deviceid !== null) {
+          this.getData(this.settings)
+        } else {
+          this.datapoints = [[0, 0]]
+          this.timestamp = "NO DATA AVAILABLE"
+
         }
       } else {
         previewMode = true;
@@ -157,7 +156,7 @@ var vueInstance = new Vue({
         function lookUpGrade(lookupScore, grades) {
           // Only change code below this line
           for (var i = 0; i < grades.length; i++) {
-            if ( 
+            if (
               grades[i].lowScore < lookupScore &&
               grades[i].highScore >= lookupScore
             ) {
@@ -180,7 +179,7 @@ var vueInstance = new Vue({
 
         var axis = chart.xAxes.push(new am4charts.ValueAxis());
         axis.min = chartMin;
-        axis.max = chartMax; 
+        axis.max = chartMax;
         axis.strictMinMax = true;
         axis.renderer.radius = am4core.percent(80);
         axis.renderer.inside = true;
@@ -395,7 +394,6 @@ var vueInstance = new Vue({
 function connecthingWidgetInit(context) {
   productionMode = true
   context.filters.subscribe(handleFilterChange);
-  supercontext = context;
 
   widgetUtils.loadWidgetSettings(function (err, widgetConfigData) {
     if (err === undefined || err === null) {
@@ -403,13 +401,12 @@ function connecthingWidgetInit(context) {
         console.log(vueInstance.$refs)
         console.log(widgetConfigData)
         if (widgetConfigData.deviceId != null) {
-         // deviceUUID = getDeviceById(widgetConfigData.deviceId)
-         updateDeviceById(widgetConfigData.deviceId, function (err, data) {
-             deviceUUID = data
-      vueInstance.$emit('update', widgetConfigData);
-    })
+          updateDeviceById(widgetConfigData.deviceId, function (err, data) {
+            deviceUUID = data
+            vueInstance.$emit('update', widgetConfigData);
+          })
         }
-       else{ vueInstance.$emit('update', widgetConfigData);}
+        else { vueInstance.$emit('update', widgetConfigData); }
       }
     }
   });
@@ -419,36 +416,20 @@ function handleFilterChange(filters) {
   console.log(filters)
   previewMode = false;
 
-  deviceUUID = getDeviceById(filters.tags.deviceId[0])
+
   if (filters) {
     updateDeviceById(filters.tags.deviceId[0], function (err, data) {
+      deviceUUID = data
       vueInstance.$emit('updateData', filters.timerange);
     })
 
   }
 }
 
-function getDeviceById(id) {
-  $.ajax('/api/v1/devices/' + id, {
-    cache: false,
-    context: this,
-    dataType: "json",
-    method: "GET",
-    processData: true,
-    contentType: "application/json",
-    error: function (xhr, status, err) {
-      console.log('Error getting connecthingGetDevicesFromServer', err);
-    },
-    success: function (data, status, xhr) {
-      console.log('Got list of devices from server:', data);
 
-      return data.records[0].UUID
-    }
-  });
-}
 function updateDeviceById(id, callback) {
   $.ajax('/api/v1/devices/' + id, {
-    cache: false, 
+    cache: false,
     context: this,
     dataType: "json",
     method: "GET",
