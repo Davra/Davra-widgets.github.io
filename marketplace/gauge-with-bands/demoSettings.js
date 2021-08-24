@@ -1,51 +1,51 @@
 var selectedRadius;
 var selectedfont;
 // Default gradingData
-var gradingData = 
-[
-    {
-        title: "Unsustainable",
-        color: "#ee1f25",
-        lowScore: -100,
-        highScore: -20
-    },
-    {
-        title: "Volatile",
-        color: "#f04922",
-        lowScore: -20,
-        highScore: 0
-    },
-    {
-        title: "Foundational",
-        color: "#fdae19",
-        lowScore: 0,
-        highScore: 20
-    },
-    {
-        title: "Developing",
-        color: "#f3eb0c",
-        lowScore: 20,
-        highScore: 40
-    },
-    {
-        title: "Maturing",
-        color: "#b0d136",
-        lowScore: 40,
-        highScore: 60
-    },
-    {
-        title: "Sustainable",
-        color: "#54b947",
-        lowScore: 60,
-        highScore: 80
-    },
-    {
-        title: "High Performing",
-        color: "#0f9747",
-        lowScore: 80,
-        highScore: 100
-    }
-]
+var gradingData =
+    [
+        {
+            title: "Unsustainable",
+            color: "#ee1f25",
+            lowScore: -100,
+            highScore: -20
+        },
+        {
+            title: "Volatile",
+            color: "#f04922",
+            lowScore: -20,
+            highScore: 0
+        },
+        {
+            title: "Foundational",
+            color: "#fdae19",
+            lowScore: 0,
+            highScore: 20
+        },
+        {
+            title: "Developing",
+            color: "#f3eb0c",
+            lowScore: 20,
+            highScore: 40
+        },
+        {
+            title: "Maturing",
+            color: "#b0d136",
+            lowScore: 40,
+            highScore: 60
+        },
+        {
+            title: "Sustainable",
+            color: "#54b947",
+            lowScore: 60,
+            highScore: 80
+        },
+        {
+            title: "High Performing",
+            color: "#0f9747",
+            lowScore: 80,
+            highScore: 100
+        }
+    ]
 
 var vueInstance = new Vue({
     el: "#app",
@@ -91,5 +91,4 @@ var vueInstance = new Vue({
 
 
 
-vueInstance.$emit('update', { maxValue: 100, minValue: -50, fontsize: 11, innerRadius: 80,});
-  
+vueInstance.$emit('update', { maxValue: 100, minValue: -50, fontsize: 11, innerRadius: 80, });

@@ -1,6 +1,5 @@
 var deviceUUID;
 var previewMode = false;
-var productionMode = false;
 
 var widgetConfig = {
   chartMax: 100,
@@ -392,7 +391,6 @@ var vueInstance = new Vue({
 })
 
 function connecthingWidgetInit(context) {
-  productionMode = true
   context.filters.subscribe(handleFilterChange);
 
   widgetUtils.loadWidgetSettings(function (err, widgetConfigData) {
@@ -453,11 +451,10 @@ checkPreviewMode()
 
 function checkPreviewMode() {
   const queryString = window.location.href;
-  console.log(queryString);
- 
-    if (queryString === "https://davra.github.io/marketplace/gauge-with-bands/index.html") {
-      previewMode = true;
-      vueInstance.$emit('update', { deviceId: null, metrics: null, timerange: null, chartCfg: null });
-    }
+
+  if (queryString === "https://davra.github.io/marketplace/gauge-with-bands/index.html") {
+    previewMode = true;
+    vueInstance.$emit('update', { deviceId: null, metrics: null, timerange: null, chartCfg: null });
+  }
 
 }
