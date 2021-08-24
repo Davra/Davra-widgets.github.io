@@ -1,191 +1,119 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-coy.css" integrity="sha512-yoghUvbzNlkBv1rS/CrImccfRINP9gYAKqq68he/XN6xEDhTuqmUE/7+Njmmh8sY3DDUAkMScPXNo1PkKvVRbg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link
-      href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css"
-      rel="stylesheet"
-    />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui"
-    />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.21.0/themes/prism-okaidia.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" />
 </head>
 
 <body>
-    
-    <div id="app">
+
+  <div id="app">
     <v-app>
-        <v-container class="mx-8"> 
-            <h2>Widget Configuration</h2>
-        <v-row dense style="margin-top: 25px; ">
-            <v-col
-     cols="12"
-     sm="3">
-        <h4>Maximum Widget Value:</h4>
-    </v-col>
-    <v-col
-     cols="12"
-     sm="9">
-      <v-text-field
-        disabled
-        placeholder="Maximum Widget Value"
-        outlined
-        :value="maxChartValue"
-        style="width:35%"
-        id="maxvalue"
-        ></v-text-field> 
-        </v-col>
-            <v-col
-     cols="12"
-     sm="3">
-        <h4>Minimum Widget Value:</h4>
-    </v-col>
-    <v-col
-     cols="12"
-     sm="9">
-      <v-text-field
-      disabled
-        placeholder="Minimum Widget Value"
-        outlined
-        :value="minChartValue"
-        style="width:35%"
-        id="minvalue"
-        ></v-text-field>
-        </v-col>
-        <v-col
-     cols="12"
-     sm="3">
-        <h4>Font size:</h4>
-    </v-col>
-    <v-col
-     cols="12"
-     sm="9">
-      <v-select :items="fonts" id="fontsize" outlined style="width:35%" v-model="fontsize" disabled>
-          </v-select>
-        </v-col>
-         <v-col
-     cols="12"
-     sm="3">
-        <h4>Inner Radius:</h4>
-    </v-col>
-    <v-col
-     cols="12"
-     sm="9">
-      <v-select :items="radii" id="radius" outlined style="width:35%" v-model="innerRadius" disabled>
-          </v-select>
-        </v-col>
-        </v-row>
-        <h2>Chart Grading Data</h2>
-        <v-row dense >
-            <v-col
-     cols="12"
-     sm="8">
-        <pre>
-            <code>
-             {{ gradingData }}
+      <v-container class="mx-8">
+        <v-row dense style="margin-top: 25px;">
+          <v-col cols="12" sm="12">
+            <h3>Widget Configuration</h3>
+          </v-col>
+          <v-col cols="12" sm="3">
+            <h5>Maximum Widget Value:</h5>
+          </v-col>
+          <v-col cols="12" sm="9">
+            <v-text-field disabled placeholder="Maximum Widget Value" outlined :value="maxChartValue" dense
+              style="width:35%;" id="maxvalue"></v-text-field>
+          </v-col>
+          <v-col cols="12" sm="3">
+            <h5>Minimum Widget Value:</h5>
+          </v-col>
+          <v-col cols="12" sm="9">
+            <v-text-field disabled placeholder="Minimum Widget Value" outlined :value="minChartValue" dense
+              style="width:35%" id="minvalue"></v-text-field>
+          </v-col>
+          <v-col cols="12" sm="3">
+            <h5>Font size:</h5>
+          </v-col>
+          <v-col cols="12" sm="9">
+            <v-select :items="fonts" id="fontsize" outlined style="width:35%" v-model="fontsize" dense disabled>
+            </v-select>
+          </v-col>
+          <v-col cols="12" sm="3">
+            <h5>Inner Radius:</h5>
+          </v-col>
+          <v-col cols="12" sm="9">
+            <v-select :items="radii" id="radius" outlined style="width:35%" v-model="innerRadius" dense disabled>
+            </v-select>
+          </v-col>
+          <v-col cols="12" sm="12">
+            <h3>Chart Grading Data</h3>
+          </v-col>
+
+          <v-col cols="12" sm="12">
+            <pre>
+            <code class="language-javascript"><!--
+            -->{{gradingData}}<!---->
             </code>
           </pre>
-            </v-col>
+          </v-col>
+          <v-col cols="12" sm="12">
+
+            <h3>Widget Level Query</h3>
+          </v-col>
+
+
+          <v-col cols="12" sm="4">
+            <v-select :items="devices" id="device" outlined style="width:100%" v-model="device" dense disabled>
+            </v-select>
+          </v-col>
+          <v-col cols="12" sm="8">
+            <v-text-field disabled outlined prepend-inner-icon="mdi-calendar" dense
+              value="2021-08-22 14:10 - 2021-08-23 14:10" style="width:50%"></v-text-field>
+          </v-col>
+          <v-col cols="12" sm="12">
+
+            <h3>Metrics</h3>
+          </v-col>
+
+          <v-col cols="12" sm="2">
+            <h5>Metric:</h5>
+          </v-col>
+          <v-col cols="12" sm="10">
+            <v-select :items="metrics" dense id="metric" outlined style="width:30%" v-model="metric" disabled>
+            </v-select>
+          </v-col>
+          <v-col cols="12" sm="2">
+            <h5>Group By:</h5>
+          </v-col>
+          <v-col cols="12" sm="10">
+            <v-select :items="groupBys" id="group" dense outlined style="width:30%" v-model="groupBy" disabled>
+          </v-col>
+          <v-col cols="12" sm="2">
+            <h5>Time Buckets:</h5>
+          </v-col>
+          <v-col cols="12" sm="3">
+            <v-select :items="times" id="time" dense outlined style="width:100%" v-model="time" disabled></v-select>
+          </v-col>
+          <v-col cols="12" sm="1">
+            <v-text-field disabled outlined dense value=5></v-text-field>
+          </v-col>
+          <v-col cols="12" sm="3">
+            <v-select :items="numbers" id="number" dense outlined style="width:70%" v-model="number" disabled>
+            </v-select>
+          </v-col>
         </v-row>
-        <h2>Widget Level Query</h2>
-        <v-row dense style="margin-top: 25px; ">
-            
-    <v-col
-     cols="12"
-     sm="5">
-     <v-select :items="devices" id="device" outlined style="width:100%" v-model="device" disabled>
-    </v-select>
-</v-col>
-    <v-col
-     cols="12"
-     sm="6">
-    <v-text-field     
-    disabled
-        outlined
-        prepend-inner-icon="mdi-calendar"
-        value="2021-08-22 14:10 - 2021-08-23 14:10"
-        style="width:75%"
-        ></v-text-field>
-        </v-col>
-        </v-row>
-        <h2>Metrics</h2>
-        <v-row dense style="margin-top: 25px; ">
-            <v-col
-     cols="12"
-     sm="3">
-        <h4>Metric:</h4>
-    </v-col>
-    <v-col
-     cols="12"
-     sm="9">
-     <v-select :items="metrics" id="metric" outlined style="width:35%" v-model="metric" disabled>
-    </v-select>
-        </v-col>
-            <v-col
-     cols="12"
-     sm="3">
-        <h4>Group By:</h4>
-    </v-col>
-    <v-col
-     cols="12"
-     sm="9">
-     <v-select :items="groupBys" id="group" outlined style="width:35%" v-model="groupBy" disabled>
-        </v-col>
-        <v-col
-     cols="12"
-     sm="3">
-        <h4>Time Buckets:</h4>
-    </v-col>
-    <v-col
-     cols="12"
-     sm="4"
-    >
-      <v-select :items="times" id="time" outlined style="width:100%" v-model="time" disabled></v-select>
-    </v-col>
-    <v-col
-    cols="12"
-    sm="1"
-   >
-      <v-text-field   
-      disabled  
-        outlined
-        value=5
-        ></v-text-field>
-    </v-col>
-    <v-col
-     cols="12"
-     sm="4"
-    >
-    <v-select :items="numbers" id="number" outlined style="width:100%" v-model="number" disabled>
-          </v-select>
-        </v-col>
-        </v-row>
-        </v-container>
+      </v-container>
     </v-app>
   </div>
- 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js" integrity="sha512-axJX7DJduStuBB8ePC8ryGzacZPr3rdLaIDZitiEgWWk2gsXxEFlm4UW0iNzj2h3wp5mOylgHAzBzM4nRSvTZA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  
 
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
-   
-    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-     <script src="demoSettings.js"></script>
-     <style>pre code {
-        background-color: #eee;
-        border: 1px solid #999;
-        display: block;
-        padding: 20px;
-      }</style>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script src="demoSettings.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.21.0/components/prism-core.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.21.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
 </body>
 
 </html>
