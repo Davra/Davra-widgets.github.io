@@ -1,7 +1,7 @@
 var supercontext;
 var deviceUUID;
 var previewMode = false;
-var productionMode = false;;
+var productionMode = false;
 
 var widgetConfig = {
   chartMax: 100,
@@ -77,7 +77,7 @@ var vueInstance = new Vue({
     widgetConfig: null,
     ranges: [],
     settings: null,
-    score: 0,
+    score: null,
     dataPoints: null,
     deviceUUID: null,
     chart: null,
@@ -90,9 +90,16 @@ var vueInstance = new Vue({
     dataPoints(newVal, oldVal) {
       console.log(newVal, oldVal)
       if (this.hand && !previewMode) {
+          if(newVal.length === 0){
+         this.score = this.settings.maxValue
+        this.timestamp = "NO DATA AVAILABLE FOR DEVICE"
+        this.hand.showValue(this.settings.maxValue, 1000, am4core.ease.cubicOut)
+              
+         }else{
         this.score = newVal[0][1]
         this.timestamp = new Date(newVal[0][0]).toString()
         this.hand.showValue(newVal[0][1], 1000, am4core.ease.cubicOut)
+         } 
       }
     }
   },
@@ -106,8 +113,14 @@ var vueInstance = new Vue({
       } else {
         this.ranges = data.gradingData
       }
-      if (settings.deviceId !== null && settings.metrics !== null && settings.timerange !== null) {
+      if (settings.deviceId !== null || settings.metrics !== null) {
+        if(settings.timerange && settings.metric && settings.deviceid !== null){
         this.getData(this.settings)
+        }else{
+            this.datapoints = [[0,0]]
+            this.timestamp = "NO DATA AVAILABLE"
+     
+        }
       } else {
         previewMode = true;
         this.dataPoints = sampleData;
@@ -167,7 +180,7 @@ var vueInstance = new Vue({
 
         var axis = chart.xAxes.push(new am4charts.ValueAxis());
         axis.min = chartMin;
-        axis.max = chartMax;
+        axis.max = chartMax; 
         axis.strictMinMax = true;
         axis.renderer.radius = am4core.percent(80);
         axis.renderer.inside = true;
@@ -237,7 +250,7 @@ var vueInstance = new Vue({
         label.horizontalCenter = "middle";
         label.verticalCenter = "bottom";
         //label.dataItem = data;
-        label.text = self.score;
+        label.text = self.score ? self.score : chartMin;
         //label.text = "{score}";
         label.fill = am4core.color(matchingGrade.color);
 
@@ -312,7 +325,7 @@ var vueInstance = new Vue({
     },
 
     getData(settings) {
-      console.log(settings)
+
       var query = {
         "metrics": [
           {
@@ -335,7 +348,7 @@ var vueInstance = new Vue({
       })
         .then(function (response) { return response.json() })
         .then(res => {
-
+          console.log(deviceUUID)
           this.dataPoints = res.queries[0].results[0].values
           console.log(this.dataPoints)
         })
@@ -390,9 +403,13 @@ function connecthingWidgetInit(context) {
         console.log(vueInstance.$refs)
         console.log(widgetConfigData)
         if (widgetConfigData.deviceId != null) {
-          deviceUUID = getDeviceById(widgetConfigData.deviceId)
+         // deviceUUID = getDeviceById(widgetConfigData.deviceId)
+         updateDeviceById(widgetConfigData.deviceId, function (err, data) {
+             deviceUUID = data
+      vueInstance.$emit('update', widgetConfigData);
+    })
         }
-        vueInstance.$emit('update', widgetConfigData);
+       else{ vueInstance.$emit('update', widgetConfigData);}
       }
     }
   });
@@ -400,6 +417,7 @@ function connecthingWidgetInit(context) {
 
 function handleFilterChange(filters) {
   console.log(filters)
+  previewMode = false;
 
   deviceUUID = getDeviceById(filters.tags.deviceId[0])
   if (filters) {
@@ -430,7 +448,7 @@ function getDeviceById(id) {
 }
 function updateDeviceById(id, callback) {
   $.ajax('/api/v1/devices/' + id, {
-    cache: false,
+    cache: false, 
     context: this,
     dataType: "json",
     method: "GET",
