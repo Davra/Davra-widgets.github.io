@@ -452,10 +452,12 @@ function updateDeviceById(id, callback) {
 checkPreviewMode()
 
 function checkPreviewMode() {
-  setTimeout(function () {
-    if (!productionMode) {
+  const queryString = window.location.href;
+  console.log(queryString);
+ 
+    if (queryString === "https://davra.github.io/marketplace/gauge-with-bands/index.html") {
       previewMode = true;
       vueInstance.$emit('update', { deviceId: null, metrics: null, timerange: null, chartCfg: null });
     }
-  }, 3000);
+
 }
