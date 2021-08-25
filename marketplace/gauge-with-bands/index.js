@@ -75,7 +75,7 @@ var vueInstance = new Vue({
     widgetConfig: null,
     ranges: [],
     settings: null,
-    score: null,
+    score: "--",
     dataPoints: null,
     deviceUUID: null,
     chart: null,
@@ -89,9 +89,9 @@ var vueInstance = new Vue({
       console.log(newVal, oldVal)
       if (this.hand && !previewMode) {
         if (newVal.length === 0) {
-          this.score = this.settings.maxValue
-          this.timestamp = "NO DATA AVAILABLE FOR DEVICE"
-          this.hand.showValue(this.settings.maxValue, 1000, am4core.ease.cubicOut)
+          this.score = "--"
+          this.timestamp = null
+          this.hand.showValue("--", 1000, am4core.ease.cubicOut)
 
         } else {
           this.score = newVal[0][1]
@@ -115,8 +115,9 @@ var vueInstance = new Vue({
         if (settings.timerange && settings.metric && settings.deviceid !== null) {
           this.getData(this.settings)
         } else {
+          this.score = "--"
           this.datapoints = [[0, 0]]
-          this.timestamp = "NO DATA AVAILABLE"
+          this.timestamp = null
 
         }
       } else {
@@ -248,9 +249,9 @@ var vueInstance = new Vue({
         label.horizontalCenter = "middle";
         label.verticalCenter = "bottom";
         //label.dataItem = data;
-        label.text = self.score ? self.score : chartMin;
+        label.text = self.score;
         //label.text = "{score}";
-        label.fill = am4core.color(matchingGrade.color);
+        label.fill = self.score === "--" ? "#000000" : am4core.color(matchingGrade.color);
 
         /**
          * Label 2
@@ -261,8 +262,8 @@ var vueInstance = new Vue({
         label2.fontSize = "2em";
         label2.horizontalCenter = "middle";
         label2.verticalCenter = "bottom";
-        label2.text = matchingGrade.title.toUpperCase();
-        label2.fill = am4core.color(matchingGrade.color);
+        label2.text = self.score === "--" ? "NO DATA AVAILABLE" : matchingGrade.title.toUpperCase();
+        label2.fill = self.score === "--" ? "#000000" : am4core.color(matchingGrade.color);
 
         /**
         * Label 3
@@ -274,7 +275,7 @@ var vueInstance = new Vue({
         label3.horizontalCenter = "middle";
         label3.verticalCenter = "middle";
         label3.text = self.timestamp;
-        label3.fill = am4core.color(matchingGrade.color);
+        label3.fill = self.score === "--" ? "#000000" : am4core.color(matchingGrade.color);
 
         /**
          * Hand
@@ -290,16 +291,22 @@ var vueInstance = new Vue({
         hand.stroke = am4core.color("#000");
 
         hand.events.on("positionchanged", function () {
-          label.text = axis2.positionToValue(hand.currentPosition).toFixed(1);
-          var value2 = axis.positionToValue(hand.currentPosition);
+          label.text = axis2.positionToValue(hand.currentPosition).toFixed(1)
+          // var value2 = axis.positionToValue(hand.currentPosition);
           var matchingGrade = lookUpGrade(self.score, ranges);
-          label2.text = matchingGrade.title.toUpperCase();
-          label2.fill = am4core.color(matchingGrade.color);
-          label2.stroke = am4core.color(matchingGrade.color);
-          label3.text = self.timestamp;
-          label3.fill = am4core.color(matchingGrade.color);
-          label3.stroke = am4core.color(matchingGrade.color);
-          label.fill = am4core.color(matchingGrade.color);
+          label2.text = !matchingGrade ? "NO DATA AVAILABLE" : matchingGrade.title.toUpperCase();
+          label2.fill = !matchingGrade ? "#000000" : am4core.color(matchingGrade.color);
+          label2.stroke = !matchingGrade ? "#000000" : am4core.color(matchingGrade.color);
+          if (self.timestamp != null) {
+            label3.text = self.timestamp;
+            label3.fill = am4core.color(matchingGrade.color);
+            label3.stroke = am4core.color(matchingGrade.color);
+            label.fill = am4core.color(matchingGrade.color);
+          } else {
+            label.text = self.score
+            label3.text = '';
+            label.fill = !matchingGrade ? "#000000" : am4core.color(matchingGrade.color);
+          }
 
         })
 
