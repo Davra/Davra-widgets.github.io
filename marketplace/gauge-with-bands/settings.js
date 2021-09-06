@@ -96,8 +96,8 @@ catch (err) {
 var saveWidgetSettings = function () {
 
     var settings = {};
-    settings.minValue = parseInt(document.getElementById('minvalue').value)
-    settings.maxValue = parseInt(document.getElementById('maxvalue').value)
+    settings.minValue = parseFloat(document.getElementById('minvalue').value)
+    settings.maxValue = parseFloat(document.getElementById('maxvalue').value)
     settings.innerRadius = selectedRadius
     settings.fontsize = selectedfont
     // Get the value of known DOM elements
