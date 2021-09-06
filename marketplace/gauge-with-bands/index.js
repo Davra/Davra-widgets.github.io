@@ -472,9 +472,9 @@ checkPreviewMode()
 function checkPreviewMode() {
   const queryString = window.location.href;
 
- // if (queryString === "https://davra.github.io/marketplace/gauge-with-bands/index.html") {
+  if (queryString === "https://davra.github.io/marketplace/gauge-with-bands/index.html") {
     previewMode = true;
     vueInstance.$emit('update', { deviceId: null, metrics: null, timerange: null, chartCfg: null });
- // }
+  }
 
 }
