@@ -1,5 +1,7 @@
 var deviceUUID;
 var previewMode = false;
+var widgetLevelQueryDevice = false;
+var widgetLevelQueryTime = false;
 
 var widgetConfig = {
   chartMax: 100,
@@ -86,7 +88,6 @@ var vueInstance = new Vue({
   },
   watch: {
     dataPoints(newVal, oldVal) {
-      console.log(newVal, oldVal)
       if (this.hand && !previewMode) {
         if (newVal.length === 0) {
           this.score = "--"
@@ -353,7 +354,6 @@ var vueInstance = new Vue({
       })
         .then(function (response) { return response.json() })
         .then(res => {
-          console.log(deviceUUID)
           this.dataPoints = res.queries[0].results[0].values
           console.log(this.dataPoints)
         })
@@ -403,30 +403,41 @@ function connecthingWidgetInit(context) {
   widgetUtils.loadWidgetSettings(function (err, widgetConfigData) {
     if (err === undefined || err === null) {
       if (widgetConfigData !== undefined) {
-        console.log(vueInstance.$refs)
-        console.log(widgetConfigData)
         if (widgetConfigData.deviceId != null) {
+          widgetLevelQueryDevice = true
+          if (widgetConfigData.timerange != null) {
+            widgetLevelQueryTime = true
+          } else { widgetLevelQueryTime = false }
           updateDeviceById(widgetConfigData.deviceId, function (err, data) {
             deviceUUID = data
             vueInstance.$emit('update', widgetConfigData);
           })
         }
-        else { vueInstance.$emit('update', widgetConfigData); }
+        else {
+          widgetLevelQueryDevice = false
+          widgetLevelQueryTime = false
+          vueInstance.$emit('update', widgetConfigData);
+
+        }
       }
     }
   });
 }
 
 function handleFilterChange(filters) {
-  console.log(filters)
   previewMode = false;
 
 
   if (filters) {
-    updateDeviceById(filters.tags.deviceId[0], function (err, data) {
-      deviceUUID = data
+    if (!widgetLevelQueryDevice) {
+      updateDeviceById(filters.tags.deviceId[0], function (err, data) {
+        deviceUUID = data
+        vueInstance.$emit('updateData', filters.timerange);
+      })
+    }
+    else if (!widgetLevelQueryTime && widgetLevelQueryDevice) {
       vueInstance.$emit('updateData', filters.timerange);
-    })
+    }
 
   }
 }
