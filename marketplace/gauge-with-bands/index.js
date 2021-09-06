@@ -273,7 +273,7 @@ var vueInstance = new Vue({
         label3.isMeasured = false;
         label3.fontSize = "1em";
         label3.horizontalCenter = "middle";
-        label3.verticalCenter = "middle";
+        label3.verticalCenter = "top";
         label3.text = self.timestamp;
         label3.fill = self.score === "--" ? "#000000" : am4core.color(matchingGrade.color);
 
