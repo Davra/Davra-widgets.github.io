@@ -19,7 +19,7 @@
                 <i class="fa fa-sort-asc accordion-indicator" aria-hidden="true"></i>
             </a>
 
-            <div id="app" style="max-height: 420px">
+            <div id="app" style="max-height: 500px">
                 <v-app>
                     <v-container class="mx-8">
                         <v-row dense style="margin-top: 25px">
@@ -49,6 +49,13 @@
                             </v-col>
                             <v-col cols="12" sm="9">
                                 <v-select :items="radii" id="radius" outlined style="width: 35%" v-model="innerRadius">
+                                </v-select>
+                            </v-col>
+                             <v-col cols="12" sm="3">
+                                <h4>Decimal Places:</h4>
+                            </v-col>
+                            <v-col cols="12" sm="9">
+                                <v-select :items="decimals" id="decimalPlaces" outlined style="width: 35%" v-model="decimalPlaces">
                                 </v-select>
                             </v-col>
                         </v-row>

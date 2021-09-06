@@ -7,7 +7,8 @@ var widgetConfig = {
   chartMax: 100,
   chartMin: -50,
   fontSize: 11,
-  innerRadius: 80
+  innerRadius: 80,
+  decimalPlaces: 0
 }
 
 var data = {
@@ -150,6 +151,7 @@ var vueInstance = new Vue({
 
         var chartMin = self.settings.minValue !== undefined ? self.settings.minValue : self.widgetConfig.chartMin;
         var chartMax = self.settings.maxValue !== undefined ? self.settings.maxValue : self.widgetConfig.chartMax;
+        var decimalPlaces = self.settings.decimalPlaces !== undefined ? self.settings.decimalPlaces : self.widgetConfig.decimalPlaces;
 
         /**
         Grading Lookup
@@ -292,7 +294,7 @@ var vueInstance = new Vue({
         hand.stroke = am4core.color("#000");
 
         hand.events.on("positionchanged", function () {
-          label.text = axis2.positionToValue(hand.currentPosition).toFixed(1)
+          label.text = axis2.positionToValue(hand.currentPosition).toFixed(decimalPlaces)
           // var value2 = axis.positionToValue(hand.currentPosition);
           var matchingGrade = lookUpGrade(self.score, ranges);
           label2.text = !matchingGrade ? "NO DATA AVAILABLE" : matchingGrade.title.toUpperCase();
@@ -470,9 +472,9 @@ checkPreviewMode()
 function checkPreviewMode() {
   const queryString = window.location.href;
 
-  if (queryString === "https://davra.github.io/marketplace/gauge-with-bands/index.html") {
+ // if (queryString === "https://davra.github.io/marketplace/gauge-with-bands/index.html") {
     previewMode = true;
     vueInstance.$emit('update', { deviceId: null, metrics: null, timerange: null, chartCfg: null });
-  }
+ // }
 
 }

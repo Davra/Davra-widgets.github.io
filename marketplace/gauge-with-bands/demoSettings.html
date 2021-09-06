@@ -45,6 +45,13 @@
             <v-select :items="radii" id="radius" outlined style="width:35%" v-model="innerRadius" dense disabled>
             </v-select>
           </v-col>
+          <v-col cols="12" sm="3">
+            <h5>Decimal Places:</h5>
+          </v-col>
+          <v-col cols="12" sm="9">
+            <v-select :items="decimals" id="decimalPlaces" outlined style="width:35%" v-model="decimalPlaces" dense disabled>
+            </v-select>
+          </v-col>
           <v-col cols="12" sm="12">
             <h3>Chart Grading Data</h3>
           </v-col>

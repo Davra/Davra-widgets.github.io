@@ -1,5 +1,6 @@
 var selectedRadius;
 var selectedfont;
+var selectedDecimal;
 
 var vueInstance = new Vue({
     el: "#app",
@@ -9,8 +10,10 @@ var vueInstance = new Vue({
         minChartValue: null,
         fontsize: null,
         innerRadius: null,
+        decimalPlaces: null,
         fonts: [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
         radii: [100, 90, 80, 70, 60, 50, 40, 30, 20, 10],
+        decimals: [0, 1, 2, 3, 4]
     },
     watch: {
         innerRadius(newVal) {
@@ -18,6 +21,9 @@ var vueInstance = new Vue({
         },
         fontsize(newVal) {
             selectedfont = this.fontsize;
+        },
+        decimalPlaces(newVal) {
+            selectedDecimal = this.decimalPlaces;
         },
     },
     mounted() {
@@ -27,6 +33,7 @@ var vueInstance = new Vue({
             this.minChartValue = settings.minValue;
             this.fontsize = settings.fontsize;
             this.innerRadius = settings.innerRadius;
+            this.decimalPlaces = settings.decimalPlaces;
 
         })
     }
@@ -46,8 +53,9 @@ try {
 
             widgetConfigData.minValue = widgetConfigData.minValue ? widgetConfigData.minValue : -50
             widgetConfigData.maxValue = widgetConfigData.maxValue ? widgetConfigData.maxValue : 100
-            widgetConfigData.fontsize =  widgetConfigData.fontsize ? widgetConfigData.fontsize : 11
+            widgetConfigData.fontsize =  widgetConfigData.fontsize ? widgetConfigData.fontsize : 9
             widgetConfigData.innerRadius = widgetConfigData.innerRadius ? widgetConfigData.innerRadius : 80
+            widgetConfigData.decimalPlaces = widgetConfigData.decimalPlaces ? widgetConfigData.decimalPlaces : 0
 
             // Attach the plugins to known settings DOM elements and set to the current configuration
             $('#deviceselector').deviceSelector({
@@ -87,7 +95,7 @@ try {
 }
 catch (err) {
     if (err instanceof ReferenceError) {
-        vueInstance.$emit('update', { maxValue: 100, minValue: -50, fontsize: 11, innerRadius: 80 });
+        vueInstance.$emit('update', { maxValue: 100, minValue: -50, fontsize: 9, innerRadius: 80, decimalPlaces: 0 });
     }
 }
 
@@ -100,6 +108,7 @@ var saveWidgetSettings = function () {
     settings.maxValue = parseFloat(document.getElementById('maxvalue').value)
     settings.innerRadius = selectedRadius
     settings.fontsize = selectedfont
+    settings.decimalPlaces = selectedDecimal
     // Get the value of known DOM elements
     var metrics = $('#metricsselector').data('metricSelector').settings.data;
     if (metrics.length > 0) {
