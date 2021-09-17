@@ -11,6 +11,7 @@ var vueInstance = new Vue({
         fontsize: null,
         innerRadius: null,
         decimalPlaces: null,
+        chartHeight: null,
         fonts: [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
         radii: [100, 90, 80, 70, 60, 50, 40, 30, 20, 10],
         decimals: [0, 1, 2, 3, 4]
@@ -34,6 +35,7 @@ var vueInstance = new Vue({
             this.fontsize = settings.fontsize;
             this.innerRadius = settings.innerRadius;
             this.decimalPlaces = settings.decimalPlaces;
+            this.chartHeight = settings.chartHeight;
 
         })
     }
@@ -50,12 +52,12 @@ try {
                 return;
             }
             
-
-            widgetConfigData.minValue = widgetConfigData.minValue ? widgetConfigData.minValue : -50
-            widgetConfigData.maxValue = widgetConfigData.maxValue ? widgetConfigData.maxValue : 100
+            widgetConfigData.maxValue = (widgetConfigData.maxValue || widgetConfigData.maxValue === 0) ? widgetConfigData.maxValue : 100
             widgetConfigData.fontsize =  widgetConfigData.fontsize ? widgetConfigData.fontsize : 9
             widgetConfigData.innerRadius = widgetConfigData.innerRadius ? widgetConfigData.innerRadius : 80
             widgetConfigData.decimalPlaces = widgetConfigData.decimalPlaces ? widgetConfigData.decimalPlaces : 0
+            widgetConfigData.chartHeight = widgetConfigData.chartHeight ? widgetConfigData.chartHeight : 500
+            widgetConfigData.minValue = (widgetConfigData.minValue || widgetConfigData.minValue === 0) ? widgetConfigData.minValue : -50
 
             // Attach the plugins to known settings DOM elements and set to the current configuration
             $('#deviceselector').deviceSelector({
@@ -95,7 +97,7 @@ try {
 }
 catch (err) {
     if (err instanceof ReferenceError) {
-        vueInstance.$emit('update', { maxValue: 100, minValue: -50, fontsize: 9, innerRadius: 80, decimalPlaces: 0 });
+        vueInstance.$emit('update', { maxValue: 100, minValue: -50, fontsize: 9, innerRadius: 80, decimalPlaces: 0, chartHeight: 500 });
     }
 }
 
@@ -109,6 +111,7 @@ var saveWidgetSettings = function () {
     settings.innerRadius = selectedRadius
     settings.fontsize = selectedfont
     settings.decimalPlaces = selectedDecimal
+    settings.chartHeight = parseInt(document.getElementById('chartHeight').value)
     // Get the value of known DOM elements
     var metrics = $('#metricsselector').data('metricSelector').settings.data;
     if (metrics.length > 0) {

@@ -19,7 +19,7 @@
                 <i class="fa fa-sort-asc accordion-indicator" aria-hidden="true"></i>
             </a>
 
-            <div id="app" style="max-height: 500px">
+            <div id="app" style="max-height: 600px">
                 <v-app>
                     <v-container class="mx-8">
                         <v-row dense style="margin-top: 25px">
@@ -57,6 +57,13 @@
                             <v-col cols="12" sm="9">
                                 <v-select :items="decimals" id="decimalPlaces" outlined style="width: 35%" v-model="decimalPlaces">
                                 </v-select>
+                            </v-col>
+                            <v-col cols="12" sm="3">
+                                <h4>Chart Height(px):</h4>
+                            </v-col>
+                            <v-col cols="12" sm="9">
+                                <v-text-field placeholder="Chart Height" outlined :value="chartHeight"
+                                    style="width: 35%" id="chartHeight"></v-text-field>
                             </v-col>
                         </v-row>
                     </v-container>

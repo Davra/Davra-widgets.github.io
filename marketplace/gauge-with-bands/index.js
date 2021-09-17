@@ -8,7 +8,8 @@ var widgetConfig = {
   chartMin: -50,
   fontSize: 11,
   innerRadius: 80,
-  decimalPlaces: 0
+  decimalPlaces: 0,
+  chartHeight: 500
 }
 
 var data = {
@@ -152,6 +153,8 @@ var vueInstance = new Vue({
         var chartMin = self.settings.minValue !== undefined ? self.settings.minValue : self.widgetConfig.chartMin;
         var chartMax = self.settings.maxValue !== undefined ? self.settings.maxValue : self.widgetConfig.chartMax;
         var decimalPlaces = self.settings.decimalPlaces !== undefined ? self.settings.decimalPlaces : self.widgetConfig.decimalPlaces;
+        var chartHeight = self.settings.chartHeight !== undefined ? self.settings.chartHeight : self.widgetConfig.chartHeight;
+        
 
         /**
         Grading Lookup
@@ -175,6 +178,7 @@ var vueInstance = new Vue({
         chart.fontSize = self.settings.fontsize !== undefined ? self.settings.fontsize : self.widgetConfig.fontsize;
         chart.innerRadius = am4core.percent(self.settings.innerRadius !== undefined ? self.settings.innerRadius : self.widgetConfig.innerRadius);
         chart.resizable = true;
+        chart.svgContainer.htmlElement.style.height = String(chartHeight) + "px";
 
         /**
          * Normal axis
@@ -431,9 +435,9 @@ function handleFilterChange(filters) {
 
 
   if (filters) {
-    if (!widgetLevelQueryDevice) {
+    if (!widgetLevelQueryDevice && filters.tags) {
       updateDeviceById(filters.tags.deviceId[0], function (err, data) {
-        deviceUUID = data
+        deviceUUID = data 
         vueInstance.$emit('updateData', filters.timerange);
       })
     }

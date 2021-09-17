@@ -53,6 +53,7 @@ var vueInstance = new Vue({
     data: {
         maxChartValue: null,
         minChartValue: null,
+        chartHeight: null,
         device: "Humidity Sensor",
         devices: ["Humidity Sensor"],
         metric: "Humidity",
@@ -87,6 +88,7 @@ var vueInstance = new Vue({
             this.fontsize = settings.fontsize;
             this.innerRadius = settings.innerRadius;
             this.decimalPlaces = settings.decimalPlaces
+            this.chartHeight = settings.chartHeight
 
         })
     }
@@ -94,4 +96,4 @@ var vueInstance = new Vue({
 
 
 
-vueInstance.$emit('update', { maxValue: 100, minValue: -50, fontsize: 11, innerRadius: 80, decimalPlaces: 0});
+vueInstance.$emit('update', { maxValue: 100, minValue: -50, fontsize: 11, innerRadius: 80, decimalPlaces: 0, chartHeight: 500});
