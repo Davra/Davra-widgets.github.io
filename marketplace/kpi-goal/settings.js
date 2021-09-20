@@ -79,7 +79,7 @@ try {
             
             widgetConfigData.goal = (widgetConfigData.goal || widgetConfigData.goal === 0) ? widgetConfigData.goal : 10000
             widgetConfigData.fontsize =  widgetConfigData.fontsize ? widgetConfigData.fontsize : 9
-            widgetConfigData.innerRadius = widgetConfigData.innerRadius ? widgetConfigData.innerRadius : 80
+            widgetConfigData.innerRadius = widgetConfigData.innerRadius ? widgetConfigData.innerRadius : 40
             widgetConfigData.icon = widgetConfigData.icon ? widgetConfigData.icon : "directions_walk"
             widgetConfigData.chartHeight = widgetConfigData.chartHeight ? widgetConfigData.chartHeight : 500
             widgetConfigData.unit = widgetConfigData.unit ? widgetConfigData.unit : "Steps"
@@ -115,7 +115,7 @@ try {
 }
 catch (err) {
     if (err instanceof ReferenceError) {
-        vueInstance.$emit('update', { maxValue: 100, minValue: -50, fontsize: 9, innerRadius: 80, icon: "directions_walk", chartHeight: 500, units: "Steps", theme: "Default" });
+        vueInstance.$emit('update', { goal: 10000, unit: "Steps", fontsize: 9, innerRadius: 40, icon: "directions_walk", chartHeight: 500, units: "Steps", theme: "Default" });
     }
 }
 

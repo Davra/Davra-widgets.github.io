@@ -21,12 +21,10 @@ var vueInstance = new Vue({
         widgetConfig: null,
         ranges: [],
         settings: null,
-        score: "--",
         dataPoints: null,
         deviceUUID: null,
         chart: null,
-        hand: null,
-        label: null,
+        label3: null,
         pieSeries2: null,
         timestamp: null,
     },
@@ -41,13 +39,12 @@ var vueInstance = new Vue({
                     ? this.settings.unit
                     : this.widgetConfig.unit;
             if (newVal.length === 0) {
-                this.score = "--";
+                this.label3.text = "No Data Available"
                 this.timestamp = null;
             } else {
                 this.score = newVal[0][1];
                 this.dataPoints = newVal;
                 this.timestamp = new Date(newVal[0][0]).toString();
-                console.log(newVal[0][1]);
                 this.pieSeries2.data = [
                     {
                         category: "Progress",
@@ -58,8 +55,12 @@ var vueInstance = new Vue({
                         value: goal - newVal[0][1],
                     },
                 ];
-
+                
+                if(newVal[0][0]===0){
+                    this.label3.text = "No Data Available"
+                }else {
                 this.label3.text = newVal[0][1] + " " + unit;
+                }
             }
         },
     },
@@ -79,7 +80,7 @@ var vueInstance = new Vue({
                     this.timestamp = null;
                 }
             } else {
-                previewMode = true;
+                previewMode = true; 
             }
 
            this.renderChart();
@@ -172,7 +173,7 @@ var vueInstance = new Vue({
                         category: "Goal",
                         value: goal,
                     },
-                ];
+                ]; 
 
                 // Disable sliding out of slices
                 pieSeries.slices.template.states.getKey(
