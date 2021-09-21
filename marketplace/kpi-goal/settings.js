@@ -103,7 +103,7 @@ try {
           : 10000;
       widgetConfigData.fontsize = widgetConfigData.fontsize
         ? widgetConfigData.fontsize
-        : 40;
+        : 30;
       widgetConfigData.innerRadius = widgetConfigData.innerRadius
         ? widgetConfigData.innerRadius
         : 40;
@@ -154,7 +154,7 @@ try {
     vueInstance.$emit("update", {
       goal: 10000,
       unit: "Steps",
-      fontsize: 9,
+      fontsize: 30,
       innerRadius: 40,
       icon: "directions_walk",
       chartHeight: 500,

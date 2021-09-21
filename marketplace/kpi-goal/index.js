@@ -5,7 +5,7 @@ var widgetLevelQueryTime = false;
 
 var widgetConfig = {
   colorTheme: null,
-  fontSize: 40,
+  fontSize: 30,
   icon: "directions_walk",
   unit: "Steps",
   goal: 10000,
@@ -198,6 +198,7 @@ var vueInstance = new Vue({
         pieSeries2.slices.template.states.getKey("hover").properties.scale = 1;
         pieSeries2.slices.template.propertyFields.fill = "fill";
         pieSeries2.labels.template.text = "{category}: {value} " + unit;
+        pieSeries2.labels.template.fontSize = fontsize * 0.6;
 
         if (previewMode === true) {
           // Add data
