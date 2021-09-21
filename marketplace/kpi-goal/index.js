@@ -25,8 +25,7 @@ var vueInstance = new Vue({
     deviceUUID: null,
     chart: null,
     label3: null,
-    pieSeries2: null,
-    timestamp: null,
+    pieSeries2: null
   },
   watch: {
     dataPoints(newVal, oldVal) {
@@ -40,11 +39,9 @@ var vueInstance = new Vue({
           : this.widgetConfig.unit;
       if (newVal.length === 0) {
         this.label3.text = "No Data Available";
-        this.timestamp = null;
       } else {
         this.score = newVal[0][1];
         this.dataPoints = newVal;
-        this.timestamp = new Date(newVal[0][0]).toString();
         this.pieSeries2.data = [
           {
             category: "Progress",
@@ -77,7 +74,6 @@ var vueInstance = new Vue({
           this.getData(this.settings);
         } else {
           this.dataPoints = [[0, 0]];
-          this.timestamp = null;
         }
       } else {
         previewMode = true;
