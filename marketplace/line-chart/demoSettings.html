@@ -1,0 +1,96 @@
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" />
+</head>
+
+<body>
+    <!-- Basic inclusions to support the settings for widgets -->
+    <script src="/ui/vendors/jquery/dist/jquery.min.js"></script>
+    <script src="/ui/assets/widget-utilities.js"></script>
+ 
+            <div id="app" style="max-height: 650px">
+                <v-app>
+                    <v-container class="mx-8">
+                        <v-row dense style="margin-top: 25px">
+                            <v-col cols="12" sm="12">
+                                <h3>Widget Configuration</h3>
+                              </v-col>
+                            <v-col cols="12" sm="3">
+                                <h4>Theme:</h4>
+                            </v-col>
+                            <v-col cols="12" sm="9">
+                                <v-select disabled dense :items="themes" id="theme" outlined style="width: 35%" v-model="theme">
+                                </v-select>
+                            </v-col>
+                            <v-col cols="12" sm="3">
+                                <h4>Font size:</h4>
+                            </v-col>
+                            <v-col cols="12" sm="9">
+                                <v-select disabled dense :items="fonts" id="fontsize" outlined style="width: 35%" v-model="fontsize">
+                                </v-select>
+                            </v-col>
+                            <v-col cols="12" sm="3">
+                                <h4>Chart Height(px):</h4>
+                            </v-col>
+                            <v-col cols="12" sm="9">
+                                <v-text-field disabled dense placeholder="Chart Height" outlined :value="chartHeight"
+                                    style="width: 35%" id="chartHeight"></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="12">
+
+                                <h3>Widget Level Query</h3>
+                              </v-col>
+                    
+                    
+                              <v-col cols="12" sm="4">
+                                <v-select :items="devices" id="device" outlined style="width:100%" v-model="device" dense disabled>
+                                </v-select>
+                              </v-col>
+                              <v-col cols="12" sm="4">
+                                <v-text-field disabled outlined prepend-inner-icon="mdi-calendar" dense
+                                  value="2021-08-22 14:10 - 2021-08-23 14:10" ></v-text-field>
+                              </v-col>
+                              <v-col cols="12" sm="4"></v-col>
+                              <v-col cols="12" sm="12">
+                    
+                                <h3>Metrics</h3>
+                              </v-col>
+                    
+                              <v-col cols="12" sm="2">
+                                <h5>Metric:</h5>
+                              </v-col>
+                              <v-col cols="12" sm="10">
+                                <v-select :items="metrics" dense id="metric" outlined style="width:30%" v-model="metric" disabled>
+                                </v-select>
+                              </v-col>
+                              <v-col cols="12" sm="2">
+                                <h5>Time Buckets:</h5>
+                              </v-col>
+                              <v-col cols="12" sm="3">
+                                <v-select :items="times" id="time" dense outlined style="width:100%" v-model="time" disabled></v-select>
+                              </v-col>
+                              <v-col cols="12" sm="1">
+                                <v-text-field disabled outlined dense value=5></v-text-field>
+                              </v-col>
+                              <v-col cols="12" sm="3">
+                                <v-select :items="numbers" id="number" dense outlined style="width:70%" v-model="number" disabled>
+                                </v-select>
+                              </v-col>
+                        </v-row>
+                    </v-container>
+                </v-app>
+            </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="demoSettings.js"></script>
+</body>
+
+</html>
