@@ -9,8 +9,8 @@ var widgetConfig = {
   fontSize: 11,
   innerRadius: 80,
   decimalPlaces: 0,
-  chartHeight: 500
-}
+  chartHeight: 500,
+};
 
 var data = {
   score: 0,
@@ -19,45 +19,45 @@ var data = {
       title: "Unsustainable",
       color: "#ee1f25",
       lowScore: -100,
-      highScore: -20
+      highScore: -20,
     },
     {
       title: "Volatile",
       color: "#f04922",
       lowScore: -20,
-      highScore: 0
+      highScore: 0,
     },
     {
       title: "Foundational",
       color: "#fdae19",
       lowScore: 0,
-      highScore: 20
+      highScore: 20,
     },
     {
       title: "Developing",
       color: "#f3eb0c",
       lowScore: 20,
-      highScore: 40
+      highScore: 40,
     },
     {
       title: "Maturing",
       color: "#b0d136",
       lowScore: 40,
-      highScore: 60
+      highScore: 60,
     },
     {
       title: "Sustainable",
       color: "#54b947",
       lowScore: 60,
-      highScore: 80
+      highScore: 80,
     },
     {
       title: "High Performing",
       color: "#0f9747",
       lowScore: 80,
-      highScore: 100
-    }
-  ]
+      highScore: 100,
+    },
+  ],
 };
 
 var sampleData = [
@@ -70,11 +70,11 @@ var sampleData = [
   [163434340, 15],
   [163434340, -25],
   [163434340, -40],
-  [163434340, 33]
+  [163434340, 33],
 ];
 
 var vueInstance = new Vue({
-  el: '#main',
+  el: "#main",
   data: {
     widgetConfig: null,
     ranges: [],
@@ -86,75 +86,83 @@ var vueInstance = new Vue({
     hand: null,
     label: null,
     label2: null,
-    timestamp: null
+    timestamp: null,
   },
   watch: {
     dataPoints(newVal, oldVal) {
       if (this.hand && !previewMode) {
         if (newVal.length === 0) {
-          this.score = "--"
-          this.timestamp = null
-          this.hand.showValue("--", 1000, am4core.ease.cubicOut)
-
+          this.score = "--";
+          this.timestamp = null;
+          this.hand.showValue("--", 1000, am4core.ease.cubicOut);
         } else {
-          this.score = newVal[0][1]
-          this.timestamp = new Date(newVal[0][0]).toString()
-          this.hand.showValue(newVal[0][1], 1000, am4core.ease.cubicOut)
+          this.score = newVal[0][1];
+          this.timestamp = new Date(newVal[0][0]).toString();
+          this.hand.showValue(newVal[0][1], 1000, am4core.ease.cubicOut);
         }
       }
-    }
+    },
   },
   mounted() {
-
     this.$on("update", function (settings) {
       this.settings = settings;
       this.widgetConfig = widgetConfig;
       if (settings.chartCfg !== null) {
-        this.ranges = settings.chartCfg
+        this.ranges = settings.chartCfg;
       } else {
-        this.ranges = data.gradingData
+        this.ranges = data.gradingData;
       }
       if (settings.deviceId !== null || settings.metrics !== null) {
-        if (settings.timerange && settings.metric && settings.deviceid !== null) {
-          this.getData(this.settings)
+        if (
+          settings.timerange &&
+          settings.metric &&
+          settings.deviceid !== null
+        ) {
+          this.getData(this.settings);
         } else {
-          this.score = "--"
-          this.datapoints = [[0, 0]]
-          this.timestamp = null
-
+          this.score = "--";
+          this.datapoints = [[0, 0]];
+          this.timestamp = null;
         }
       } else {
         previewMode = true;
         this.dataPoints = sampleData;
       }
 
-      this.renderChart()
-    })
+      this.renderChart();
+    });
 
     this.$on("updateData", function (timerange) {
-      console.log(timerange)
-      this.getNewData(timerange)
-    })
-
-
+      console.log(timerange);
+      this.getNewData(timerange);
+    });
   },
 
   methods: {
     renderChart() {
-
-      var self = this
+      var self = this;
       am4core.ready(function () {
-
         // Themes begin
         am4core.useTheme(am4themes_animated);
         am4core.addLicense("ch-custom-attribution");
         // Themes end
 
-        var chartMin = self.settings.minValue !== undefined ? self.settings.minValue : self.widgetConfig.chartMin;
-        var chartMax = self.settings.maxValue !== undefined ? self.settings.maxValue : self.widgetConfig.chartMax;
-        var decimalPlaces = self.settings.decimalPlaces !== undefined ? self.settings.decimalPlaces : self.widgetConfig.decimalPlaces;
-        var chartHeight = self.settings.chartHeight !== undefined ? self.settings.chartHeight : self.widgetConfig.chartHeight;
-        
+        var chartMin =
+          self.settings.minValue !== undefined
+            ? self.settings.minValue
+            : self.widgetConfig.chartMin;
+        var chartMax =
+          self.settings.maxValue !== undefined
+            ? self.settings.maxValue
+            : self.widgetConfig.chartMax;
+        var decimalPlaces =
+          self.settings.decimalPlaces !== undefined
+            ? self.settings.decimalPlaces
+            : self.widgetConfig.decimalPlaces;
+        var chartHeight =
+          self.settings.chartHeight !== undefined
+            ? self.settings.chartHeight
+            : self.widgetConfig.chartHeight;
 
         /**
         Grading Lookup
@@ -175,10 +183,18 @@ var vueInstance = new Vue({
         // create chart
         var chart = am4core.create("chartdiv", am4charts.GaugeChart);
         chart.hiddenState.properties.opacity = 0;
-        chart.fontSize = self.settings.fontsize !== undefined ? self.settings.fontsize : self.widgetConfig.fontsize;
-        chart.innerRadius = am4core.percent(self.settings.innerRadius !== undefined ? self.settings.innerRadius : self.widgetConfig.innerRadius);
+        chart.fontSize =
+          self.settings.fontsize !== undefined
+            ? self.settings.fontsize
+            : self.widgetConfig.fontsize;
+        chart.innerRadius = am4core.percent(
+          self.settings.innerRadius !== undefined
+            ? self.settings.innerRadius
+            : self.widgetConfig.innerRadius
+        );
         chart.resizable = true;
-        chart.svgContainer.htmlElement.style.height = String(chartHeight) + "px";
+        chart.svgContainer.htmlElement.style.height =
+          String(chartHeight) + "px";
 
         /**
          * Normal axis
@@ -216,20 +232,20 @@ var vueInstance = new Vue({
         axis2.renderer.labels.template.fontWeight = "bold";
         axis2.renderer.labels.template.fillOpacity = 0.3;
 
-
-
         /**
         Ranges
         */
-        var ranges = self.ranges
+        var ranges = self.ranges;
 
         for (let grading of ranges) {
           var range = axis2.axisRanges.create();
           range.axisFill.fill = am4core.color(grading.color);
           range.axisFill.fillOpacity = 0.8;
           range.axisFill.zIndex = -1;
-          range.value = grading.lowScore > chartMin ? grading.lowScore : chartMin;
-          range.endValue = grading.highScore < chartMax ? grading.highScore : chartMax;
+          range.value =
+            grading.lowScore > chartMin ? grading.lowScore : chartMin;
+          range.endValue =
+            grading.highScore < chartMax ? grading.highScore : chartMax;
           range.grid.strokeOpacity = 0;
           range.stroke = am4core.color(grading.color).lighten(-0.1);
           range.label.inside = true;
@@ -258,7 +274,8 @@ var vueInstance = new Vue({
         //label.dataItem = data;
         label.text = self.score;
         //label.text = "{score}";
-        label.fill = self.score === "--" ? "#000000" : am4core.color(matchingGrade.color);
+        label.fill =
+          self.score === "--" ? "#000000" : am4core.color(matchingGrade.color);
 
         /**
          * Label 2
@@ -269,12 +286,16 @@ var vueInstance = new Vue({
         label2.fontSize = "2em";
         label2.horizontalCenter = "middle";
         label2.verticalCenter = "bottom";
-        label2.text = self.score === "--" ? "NO DATA AVAILABLE" : matchingGrade.title.toUpperCase();
-        label2.fill = self.score === "--" ? "#000000" : am4core.color(matchingGrade.color);
+        label2.text =
+          self.score === "--"
+            ? "NO DATA AVAILABLE"
+            : matchingGrade.title.toUpperCase();
+        label2.fill =
+          self.score === "--" ? "#000000" : am4core.color(matchingGrade.color);
 
         /**
-        * Label 3
-        */
+         * Label 3
+         */
 
         var label3 = chart.radarContainer.createChild(am4core.Label);
         label3.isMeasured = false;
@@ -282,7 +303,8 @@ var vueInstance = new Vue({
         label3.horizontalCenter = "middle";
         label3.verticalCenter = "top";
         label3.text = self.timestamp;
-        label3.fill = self.score === "--" ? "#000000" : am4core.color(matchingGrade.color);
+        label3.fill =
+          self.score === "--" ? "#000000" : am4core.color(matchingGrade.color);
 
         /**
          * Hand
@@ -298,59 +320,66 @@ var vueInstance = new Vue({
         hand.stroke = am4core.color("#000");
 
         hand.events.on("positionchanged", function () {
-          label.text = axis2.positionToValue(hand.currentPosition).toFixed(decimalPlaces)
+          label.text = axis2
+            .positionToValue(hand.currentPosition)
+            .toFixed(decimalPlaces);
           // var value2 = axis.positionToValue(hand.currentPosition);
           var matchingGrade = lookUpGrade(self.score, ranges);
-          label2.text = !matchingGrade ? "NO DATA AVAILABLE" : matchingGrade.title.toUpperCase();
-          label2.fill = !matchingGrade ? "#000000" : am4core.color(matchingGrade.color);
-          label2.stroke = !matchingGrade ? "#000000" : am4core.color(matchingGrade.color);
+          label2.text = !matchingGrade
+            ? "NO DATA AVAILABLE"
+            : matchingGrade.title.toUpperCase();
+          label2.fill = !matchingGrade
+            ? "#000000"
+            : am4core.color(matchingGrade.color);
+          label2.stroke = !matchingGrade
+            ? "#000000"
+            : am4core.color(matchingGrade.color);
           if (self.timestamp != null) {
             label3.text = self.timestamp;
             label3.fill = am4core.color(matchingGrade.color);
             label3.stroke = am4core.color(matchingGrade.color);
             label.fill = am4core.color(matchingGrade.color);
           } else {
-            label.text = self.score
-            label3.text = '';
-            label.fill = !matchingGrade ? "#000000" : am4core.color(matchingGrade.color);
+            label.text = self.score;
+            label3.text = "";
+            label.fill = !matchingGrade
+              ? "#000000"
+              : am4core.color(matchingGrade.color);
           }
-
-        })
-
+        });
 
         if (previewMode) {
-          var index = 0
+          var index = 0;
 
           setInterval(function () {
             var value = self.dataPoints[index][1];
-            self.score = value
-            index += 1
-            if (index === self.dataPoints.length) { index = 0 }
+            self.score = value;
+            index += 1;
+            if (index === self.dataPoints.length) {
+              index = 0;
+            }
             hand.showValue(value, 1000, am4core.ease.cubicOut);
           }, 3000);
         }
-        self.hand = hand
-        self.chart = chart
-
-
+        self.hand = hand;
+        self.chart = chart;
       }); // end am4core.ready()
     },
 
     getData(settings) {
-
       var query = {
-        "metrics": [
+        metrics: [
           {
-            "name": settings.metric,
-            "limit": 1,
-            "order": "desc",
-            "tags": { "UUID": deviceUUID },
-          }
+            name: settings.metric,
+            limit: 1,
+            order: "desc",
+            tags: { UUID: deviceUUID },
+          },
         ],
-        "start_absolute": settings.timerange.startTime,
-        "end_absolute": settings.timerange.endTime
-      }
-      return fetch('/api/v2/timeseriesData', {
+        start_absolute: settings.timerange.startTime,
+        end_absolute: settings.timerange.endTime,
+      };
+      return fetch("/api/v2/timeseriesData", {
         method: "POST",
         processData: true,
         body: JSON.stringify(query),
@@ -358,29 +387,28 @@ var vueInstance = new Vue({
           "Content-type": "application/json",
         },
       })
-        .then(function (response) { return response.json() })
-        .then(res => {
-          this.dataPoints = res.queries[0].results[0].values
-          console.log(this.dataPoints)
+        .then(function (response) {
+          return response.json();
         })
-
-
+        .then((res) => {
+          this.dataPoints = res.queries[0].results[0].values;
+          console.log(this.dataPoints);
+        });
     },
     getNewData(timerange) {
       var query = {
-        "metrics": [
+        metrics: [
           {
-            "name": this.settings.metric,
-            "limit": 1,
-            "order": "desc",
-            "tags": { "UUID": deviceUUID },
-
-          }
+            name: this.settings.metric,
+            limit: 1,
+            order: "desc",
+            tags: { UUID: deviceUUID },
+          },
         ],
-        "start_absolute": timerange.startTime,
-        "end_absolute": timerange.endTime
-      }
-      return fetch('/api/v2/timeseriesData', {
+        start_absolute: timerange.startTime,
+        end_absolute: timerange.endTime,
+      };
+      return fetch("/api/v2/timeseriesData", {
         method: "POST",
         processData: true,
         body: JSON.stringify(query),
@@ -388,20 +416,16 @@ var vueInstance = new Vue({
           "Content-type": "application/json",
         },
       })
-        .then(function (response) { return response.json() })
-        .then(res => {
-
-          this.dataPoints = res.queries[0].results[0].values
-          console.log(this.dataPoints)
+        .then(function (response) {
+          return response.json();
         })
-
-
-    }
-
-
-  }
-
-})
+        .then((res) => {
+          this.dataPoints = res.queries[0].results[0].values;
+          console.log(this.dataPoints);
+        });
+    },
+  },
+});
 
 function connecthingWidgetInit(context) {
   context.filters.subscribe(handleFilterChange);
@@ -410,20 +434,24 @@ function connecthingWidgetInit(context) {
     if (err === undefined || err === null) {
       if (widgetConfigData !== undefined) {
         if (widgetConfigData.deviceId != null) {
-          widgetLevelQueryDevice = true
+          widgetLevelQueryDevice = true;
           if (widgetConfigData.timerange != null) {
-            widgetLevelQueryTime = true
-          } else { widgetLevelQueryTime = false }
+            widgetLevelQueryTime = true;
+          } else {
+            widgetLevelQueryTime = false;
+            widgetConfigData.timerange = {
+              startTime: moment().subtract(24, "hours").valueOf(),
+              endTime: moment().valueOf(),
+            };
+          }
           updateDeviceById(widgetConfigData.deviceId, function (err, data) {
-            deviceUUID = data
-            vueInstance.$emit('update', widgetConfigData);
-          })
-        }
-        else {
-          widgetLevelQueryDevice = false
-          widgetLevelQueryTime = false
-          vueInstance.$emit('update', widgetConfigData);
-
+            deviceUUID = data;
+            vueInstance.$emit("update", widgetConfigData);
+          });
+        } else {
+          widgetLevelQueryDevice = false;
+          widgetLevelQueryTime = false;
+          vueInstance.$emit("update", widgetConfigData);
         }
       }
     }
@@ -433,24 +461,20 @@ function connecthingWidgetInit(context) {
 function handleFilterChange(filters) {
   previewMode = false;
 
-
   if (filters) {
     if (!widgetLevelQueryDevice && filters.tags) {
       updateDeviceById(filters.tags.deviceId[0], function (err, data) {
-        deviceUUID = data 
-        vueInstance.$emit('updateData', filters.timerange);
-      })
+        deviceUUID = data;
+        vueInstance.$emit("updateData", filters.timerange);
+      });
+    } else if (!widgetLevelQueryTime && widgetLevelQueryDevice) {
+      vueInstance.$emit("updateData", filters.timerange);
     }
-    else if (!widgetLevelQueryTime && widgetLevelQueryDevice) {
-      vueInstance.$emit('updateData', filters.timerange);
-    }
-
   }
 }
 
-
 function updateDeviceById(id, callback) {
-  $.ajax('/api/v1/devices/' + id, {
+  $.ajax("/api/v1/devices/" + id, {
     cache: false,
     context: this,
     dataType: "json",
@@ -458,27 +482,34 @@ function updateDeviceById(id, callback) {
     processData: true,
     contentType: "application/json",
     error: function (xhr, status, err) {
-      console.log('Error getting connecthingGetDevicesFromServer', err);
+      console.log("Error getting connecthingGetDevicesFromServer", err);
     },
     success: function (data, status, xhr) {
-      console.log('Got list of devices from server:', data);
+      console.log("Got list of devices from server:", data);
       if (data && data.records) {
         if (callback) {
           callback(null, data.records[0].UUID);
         }
       }
-    }
+    },
   });
 }
 
-checkPreviewMode()
+checkPreviewMode();
 
 function checkPreviewMode() {
   const queryString = window.location.href;
 
-  if (queryString === "https://davra.github.io/marketplace/gauge-with-bands/index.html") {
+  if (
+    queryString ===
+    "https://davra.github.io/marketplace/gauge-with-bands/index.html"
+  ) {
     previewMode = true;
-    vueInstance.$emit('update', { deviceId: null, metrics: null, timerange: null, chartCfg: null });
+    vueInstance.$emit("update", {
+      deviceId: null,
+      metrics: null,
+      timerange: null,
+      chartCfg: null,
+    });
   }
-
 }

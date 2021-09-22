@@ -305,6 +305,10 @@ function connecthingWidgetInit(context) {
             widgetLevelQueryTime = true;
           } else {
             widgetLevelQueryTime = false;
+            widgetConfigData.timerange = {
+              startTime: moment().subtract(24, "hours").valueOf(),
+              endTime: moment().valueOf(),
+            }
           }
           updateDeviceById(widgetConfigData.deviceId, function (err, data) {
             deviceUUID = data;
