@@ -27,42 +27,49 @@
                                 <h4>Maximum Widget Value:</h4>
                             </v-col>
                             <v-col cols="12" sm="9">
-                                <v-text-field placeholder="Maximum Widget Value" outlined :value="maxChartValue"
+                                <v-text-field placeholder="Maximum Widget Value" dense outlined :value="maxChartValue"
                                     style="width: 35%" id="maxvalue"></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="3">
                                 <h4>Minimum Widget Value:</h4>
                             </v-col>
                             <v-col cols="12" sm="9">
-                                <v-text-field placeholder="Minimum Widget Value" outlined :value="minChartValue"
+                                <v-text-field placeholder="Minimum Widget Value" dense outlined :value="minChartValue"
                                     style="width: 35%" id="minvalue"></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="3">
                                 <h4>Font size:</h4>
                             </v-col>
                             <v-col cols="12" sm="9">
-                                <v-select :items="fonts" id="fontsize" outlined style="width: 35%" v-model="fontsize">
+                                <v-select :items="fonts" id="fontsize" dense outlined style="width: 35%" v-model="fontsize">
                                 </v-select>
                             </v-col>
                             <v-col cols="12" sm="3">
                                 <h4>Inner Radius:</h4>
                             </v-col>
                             <v-col cols="12" sm="9">
-                                <v-select :items="radii" id="radius" outlined style="width: 35%" v-model="innerRadius">
+                                <v-select :items="radii" id="radius" dense outlined style="width: 35%" v-model="innerRadius">
                                 </v-select>
                             </v-col>
                              <v-col cols="12" sm="3">
                                 <h4>Decimal Places:</h4>
                             </v-col>
                             <v-col cols="12" sm="9">
-                                <v-select :items="decimals" id="decimalPlaces" outlined style="width: 35%" v-model="decimalPlaces">
+                                <v-select :items="decimals" id="decimalPlaces" dense outlined style="width: 35%" v-model="decimalPlaces">
                                 </v-select>
+                            </v-col>
+                             <v-col cols="12" sm="3">
+                                <h4>Metric Unit(optional):</h4>
+                            </v-col>
+                            <v-col cols="12" sm="9">
+                                <v-text-field placeholder="Metric Unit" dense outlined :value="metricUnit"
+                                    style="width: 35%" id="metricUnit"></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="3">
                                 <h4>Chart Height(px):</h4>
                             </v-col>
                             <v-col cols="12" sm="9">
-                                <v-text-field placeholder="Chart Height" outlined :value="chartHeight"
+                                <v-text-field placeholder="Chart Height" dense outlined :value="chartHeight"
                                     style="width: 35%" id="chartHeight"></v-text-field>
                             </v-col>
                         </v-row>

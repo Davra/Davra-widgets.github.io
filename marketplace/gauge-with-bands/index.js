@@ -10,6 +10,7 @@ var widgetConfig = {
   innerRadius: 80,
   decimalPlaces: 0,
   chartHeight: 500,
+  metricUnit: '',
 };
 
 var data = {
@@ -163,6 +164,10 @@ var vueInstance = new Vue({
           self.settings.chartHeight !== undefined
             ? self.settings.chartHeight
             : self.widgetConfig.chartHeight;
+        var metricUnit =
+          self.settings.metricUnit !== undefined
+            ? self.settings.metricUnit
+            : self.widgetConfig.metricUnit;
 
         /**
         Grading Lookup
@@ -322,8 +327,7 @@ var vueInstance = new Vue({
         hand.events.on("positionchanged", function () {
           label.text = axis2
             .positionToValue(hand.currentPosition)
-            .toFixed(decimalPlaces);
-          // var value2 = axis.positionToValue(hand.currentPosition);
+            .toFixed(decimalPlaces) + ' ' + metricUnit;
           var matchingGrade = lookUpGrade(self.score, ranges);
           label2.text = !matchingGrade
             ? "NO DATA AVAILABLE"
