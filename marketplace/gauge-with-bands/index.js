@@ -10,7 +10,7 @@ var widgetConfig = {
   innerRadius: 80,
   decimalPlaces: 0,
   chartHeight: 500,
-  metricUnit: '',
+  metricUnit: "",
 };
 
 var data = {
@@ -325,13 +325,18 @@ var vueInstance = new Vue({
         hand.stroke = am4core.color("#000");
 
         hand.events.on("positionchanged", function () {
-          label.text = axis2
-            .positionToValue(hand.currentPosition)
-            .toFixed(decimalPlaces) + ' ' + metricUnit;
+          label.text =
+            axis2.positionToValue(hand.currentPosition).toFixed(decimalPlaces) +
+            " " +
+            metricUnit;
           var matchingGrade = lookUpGrade(self.score, ranges);
-          label2.text = !matchingGrade
-            ? "NO DATA AVAILABLE"
-            : matchingGrade.title.toUpperCase();
+          if (self.score === "--") {
+            label2.text = "NO DATA AVAILABLE";
+          } else {
+            label2.text = !matchingGrade
+              ? "Out of Range"
+              : matchingGrade.title.toUpperCase();
+          }
           label2.fill = !matchingGrade
             ? "#000000"
             : am4core.color(matchingGrade.color);
@@ -340,9 +345,15 @@ var vueInstance = new Vue({
             : am4core.color(matchingGrade.color);
           if (self.timestamp != null) {
             label3.text = self.timestamp;
-            label3.fill = am4core.color(matchingGrade.color);
-            label3.stroke = am4core.color(matchingGrade.color);
-            label.fill = am4core.color(matchingGrade.color);
+            label3.fill = !matchingGrade
+              ? "#000000"
+              : am4core.color(matchingGrade.color);
+            label3.stroke = !matchingGrade
+              ? "#000000"
+              : am4core.color(matchingGrade.color);
+            label.fill = !matchingGrade
+              ? "#000000"
+              : am4core.color(matchingGrade.color);
           } else {
             label.text = self.score;
             label3.text = "";
