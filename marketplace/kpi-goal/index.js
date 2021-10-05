@@ -48,7 +48,7 @@ var vueInstance = new Vue({
             value: newVal[0][1],
           },
           {
-            category: "Remaining until Goal",
+            category: "Remaining",
             value: goal - newVal[0][1],
           },
         ];
@@ -204,7 +204,7 @@ var vueInstance = new Vue({
               value: 6969,
             },
             {
-              category: "Remaining until Goal",
+              category: "Remaining",
               value: goal - 6969,
             },
           ];
