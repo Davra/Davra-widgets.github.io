@@ -1,0 +1,90 @@
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" />
+</head>
+
+<body>
+    <!-- Basic inclusions to support the settings for widgets -->
+    <script src="/ui/vendors/jquery/dist/jquery.min.js"></script>
+    <script src="/ui/assets/widget-utilities.js"></script>
+    <div class="settings-page accordion">
+        <div class="panel" style="margin-bottom: 10px">
+            <a class="panel-heading widget-accordion">
+                <p>Widget Configuration</p>
+                <i class="fa fa-sort-asc accordion-indicator" aria-hidden="true"></i>
+            </a>
+
+            <div id="app">
+                <v-app style="max-height: 250px;">
+                    <v-container class="mx-8">
+                        <v-row dense style="margin-top: 25px">
+                            <v-col cols="12" sm="3">
+                                <h4>Theme:</h4>
+                            </v-col>
+                            <v-col cols="12" sm="9">
+                                <v-select dense :items="themes" id="theme" outlined style="width: 35%" v-model="theme">
+                                </v-select>
+                            </v-col>
+                            <v-col cols="12" sm="3">
+                                <h4>Font size:</h4>
+                            </v-col>
+                            <v-col cols="12" sm="9">
+                                <v-select dense :items="fonts" id="fontsize" outlined style="width: 35%" v-model="fontsize">
+                                </v-select>
+                            </v-col>
+                            <v-col cols="12" sm="3">
+                                <h4>Chart Height(px):</h4>
+                            </v-col>
+                            <v-col cols="12" sm="9">
+                                <v-text-field dense placeholder="Chart Height" outlined :value="chartHeight"
+                                    style="width: 35%" id="chartHeight"></v-text-field>
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                </v-app>
+            </div>
+        </div>
+
+        <!-- Settings HTML for regular AmCharts configuration -->
+        <div class="panel">
+            <a class="panel-heading widget-accordion">
+                <p>Widget Level Query</p>
+                <i class="fa fa-sort-asc accordion-indicator" aria-hidden="true"></i>
+            </a>
+            <div class="panel-body">
+                <ul class="settings-inline-ul">
+                    <li id="deviceselector"></li>
+                    <li id="timerangeselector"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="panel">
+            <a class="panel-heading widget-accordion">
+                <p>Metrics</p>
+                <i class="fa fa-sort-asc accordion-indicator" aria-hidden="true"></i>
+            </a>
+            <div class="panel-body">
+                <div id="metricsselector"></div>
+            </div>
+        </div>
+        <div id="divUserFeedback"></div>
+        <div style="text-align: right">
+            <br />
+            <button id="buttonSaveWidgetSettings" class="btn btn-primary">
+                Apply Settings
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="settings.js"></script>
+</body>
+
+</html>

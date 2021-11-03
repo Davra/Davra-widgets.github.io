@@ -1,123 +1,38 @@
-<!-- Styles -->
-<style>
-    #chartdiv {
-      width: 100%;
-      height: 500px;
-    }
-  </style>
-  
-  <!-- Resources -->
-  <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
-  <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
-  <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
-  
-  <!-- Chart code -->
-  <script>
-    am4core.ready(function () {
-      // Themes begin
-      am4core.useTheme(am4themes_animated)
-      // Themes end
-  
-      // Create chart instance
-      var chart = am4core.create('chartdiv', am4charts.XYChart)
-  
-      // Add data
-      var sampleDataSet1 = [];
-      var sampleDataSet2 = [];
-      var startTime = new Date().valueOf() - 300 * 24 * 60 * 60 * 1000;
-      var DAY = 24 * 60 * 60 * 1000;
-      for(var i=0; i<300; i++){
-          sampleDataSet1.push({
-              date: formatDate(new Date(startTime + i * DAY)),
-              value: Math.random() * 90
-          });
-          sampleDataSet2.push({
-              date: formatDate(new Date(startTime + i * DAY)),
-              value: Math.random() * 90
-          });
-      }     
-  
-      // Set input format for the dates
-      chart.dateFormatter.inputDateFormat = 'yyyy-MM-dd'
-  
-      // Create axes
-      var dateAxis = chart.xAxes.push(new am4charts.DateAxis())
-      var valueAxis = chart.yAxes.push(new am4charts.ValueAxis())
-  
-      // Create series
-      var series1 = chart.series.push(new am4charts.LineSeries())
-      series1.dataFields.valueY = 'value'
-      series1.dataFields.dateX = 'date'
-      series1.tooltipText = '{value}'
-      series1.strokeWidth = 3
-      series1.minBulletDistance = 15
-      var bullet = series1.bullets.push(new am4charts.CircleBullet());
-      bullet.circle.fill = am4core.color("#fff");
-      bullet.circle.strokeWidth = 3;
-      series1.data = sampleDataSet1;
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+<link rel="stylesheet" href="index.css">
+</head>
+     <body>
+         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/kelly.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/spiritedaway.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/dataviz.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/material.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/frozen.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/moonrisekingdom.js"></script>
+<script src="/ui/vendors/underscore/underscore-min.js"></script>
+<script src="/ui/vendors/jquery/3.5.1/jquery.min.js"></script>
+<script src="/ui/vendors/amcharts/amcharts/amcharts.js"></script>  
+<script src="/ui/assets/widget-utilities.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script> 
+  <!--      <script src="/ui/vendors/amcharts/amcharts/serial.js"></script>
+        <script src="/ui/vendors/amcharts/amcharts/plugins/export/export.min.js"></script>
 
-      var series2 = chart.series.push(new am4charts.LineSeries())
-      series2.dataFields.valueY = 'value'
-      series2.dataFields.dateX = 'date'
-      series2.tooltipText = '{value}'
-      series2.strokeWidth = 3
-      series2.minBulletDistance = 15
-      var bullet2 = series2.bullets.push(new am4charts.CircleBullet());
-      bullet2.circle.fill = am4core.color("#fff");
-      bullet2.circle.strokeWidth = 3;
-      series2.data = sampleDataSet2;
+        <script src="/ui/vendors/jquery/jquery-migrate-3.3.2.min.js"></script>   
+   
+        <script src="/ui/assets/templates/amcharts-connecthing-theme.js"></script>
+        <script src="/ui/assets/templates/amcharts-connecthing-widgets.js"></script> -->
 
+<div id="main">
+    <div id="chartdiv"></div> 
+</div>
 
-  
-      // Drop-shaped tooltips
-      series1.tooltip.background.cornerRadius = 20
-      series1.tooltip.background.strokeOpacity = 0
-      series1.tooltip.pointerOrientation = 'vertical'
-      series1.tooltip.label.minWidth = 40
-      series1.tooltip.label.minHeight = 40
-      series1.tooltip.label.textAlign = 'middle'
-      series1.tooltip.label.textValign = 'middle'
+ <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+<script src="index.js"></script>
+</body>
+</html>
 
-      series2.tooltip.background.cornerRadius = 20
-      series2.tooltip.background.strokeOpacity = 0
-      series2.tooltip.pointerOrientation = 'vertical'
-      series2.tooltip.label.minWidth = 40
-      series2.tooltip.label.minHeight = 40
-      series2.tooltip.label.textAlign = 'middle'
-      series2.tooltip.label.textValign = 'middle'
-  
-      // Make a panning cursor
-      chart.cursor = new am4charts.XYCursor()
-  
-      // Create vertical scrollbar and place it before the value axis
-      chart.scrollbarY = new am4core.Scrollbar()
-      chart.scrollbarY.parent = chart.leftAxesContainer
-      chart.scrollbarY.toBack()
-  
-      // Create a horizontal scrollbar with previe and place it underneath the date axis
-      chart.scrollbarX = new am4charts.XYChartScrollbar()
-      chart.scrollbarX.series.push(series1)
-      chart.scrollbarX.parent = chart.bottomAxesContainer
-  
-      dateAxis.start = 0.90
-      dateAxis.keepSelection = true
-    }) // end am4core.ready()
-
-    function formatDate(date) {
-    var d = new Date(date),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
-
-    if (month.length < 2) 
-        month = '0' + month;
-    if (day.length < 2) 
-        day = '0' + day;
-
-    return [year, month, day].join('-');
-}
-  </script>
-  
-  <!-- HTML -->
-  <div id="chartdiv"></div>
-  
