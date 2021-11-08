@@ -1,7 +1,7 @@
 var selectedfont;
 var selectedTheme;
 var themesObject = {
-  Default: "am4themes_animated",
+  "Default": "am4themes_amcharts",
   "Red/Navy": "am4themes_dataviz",
   "Pink/Orange": "am4themes_material",
   "Yellow/Purple": "am4themes_kelly",
@@ -28,7 +28,7 @@ var vueInstance = new Vue({
       "Grey",
     ],
     themesObj: {
-      Default: "am4themes_animated",
+      "Default": "am4themes_amcharts",
       "Red/Navy": "am4themes_dataviz",
       "Pink/Orange": "am4themes_material",
       "Yellow/Purple": "am4themes_kelly",

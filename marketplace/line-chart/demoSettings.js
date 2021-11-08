@@ -3,7 +3,7 @@ var selectedfont;
 var selectedIcon;
 var selectedTheme;
 var themesObject = {
-            "Default": "am4themes_animated",
+            "Default": "am4themes_amcharts",
             "Red/Navy": "am4themes_dataviz",
             "Pink/Orange": "am4themes_material",
             "Yellow/Purple": "am4themes_kelly",
@@ -30,7 +30,7 @@ var vueInstance = new Vue({
         fonts: [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
         themes: ["Default", "Red/Navy", "Pink/Orange", "Yellow/Purple", "Lilac", "Brown", "Grey"],
         themesObj: {
-            "Default": "am4themes_animated",
+            "Default": "am4themes_amcharts",
             "Red/Navy": "am4themes_dataviz",
             "Pink/Orange": "am4themes_material",
             "Yellow/Purple": "am4themes_kelly",
