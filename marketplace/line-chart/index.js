@@ -189,6 +189,15 @@ var vueInstance = new Vue({
           {
             name: settings.metric,
             tags: { UUID: deviceUUID },
+            aggregators: settings.metrics[0].timeBucket === "auto" ? [{
+                            name: settings.metrics[0].aggregator,
+                        }] : [{
+                            name: settings.metrics[0].aggregator,
+                            sampling: {
+                                unit: settings.metrics[0].timeBucket,
+                                value: settings.metrics[0].timeBucketValue
+                            }
+                        }]
           },
         ],
         start_absolute: settings.timerange.startTime,
@@ -216,6 +225,15 @@ var vueInstance = new Vue({
           {
             name: this.settings.metric,
             tags: { UUID: deviceUUID },
+            aggregators: this.settings.metrics[0].timeBucket === "auto" ? [{
+                            name: this.settings.metrics[0].aggregator,
+                        }] : [{
+                            name: this.settings.metrics[0].aggregator,
+                            sampling: {
+                                unit: this.settings.metrics[0].timeBucket,
+                                value: this.settings.metrics[0].timeBucketValue
+                            }
+                        }]
           },
         ],
         start_absolute: timerange.startTime,
