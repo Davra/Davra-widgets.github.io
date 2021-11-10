@@ -1,4 +1,5 @@
 var deviceUUID;
+var deviceId;
 var previewMode = false;
 var widgetLevelQueryDevice = false;
 var widgetLevelQueryTime = false;
@@ -29,14 +30,21 @@ var vueInstance = new Vue({
             } else if (newVal !== oldVal) {
                 this.chartData = [];
                 var value = 0;
+                var seenDates = [];
                 var keys = Object.keys(newVal);
                 for (const key in keys) {
                     for (const point in newVal[keys[key]]) {
                         value = newVal[keys[key]][point][1];
-                        var obj = {}
-                        obj['date'] = new Date(newVal[keys[key]][point][0])
-                        obj[keys[key]] = value
-                        this.chartData.push(obj);
+                        if (seenDates.includes(newVal[keys[key]][point][0])) {
+                            let existingObj = this.chartData.find(o => o.date == newVal[keys[key]][point][0]);
+                            existingObj[keys[key]] = value
+                        } else {
+                            seenDates.push(newVal[keys[key]][point][0])
+                            var obj = {}
+                            obj['date'] = newVal[keys[key]][point][0]
+                            obj[keys[key]] = value
+                            this.chartData.push(obj);
+                        }
                     }
                 }
                 this.label.text = "";
@@ -46,24 +54,19 @@ var vueInstance = new Vue({
         deviceUUID(newVal, oldVal) {
             if (this.metrics.length === 0) {
                 for (const metric in this.settings.metrics) {
-                    if (this.settings.metrics[metric].timeBucket !== "auto") {
-                        this.metrics.push({
-                            name: this.settings.metrics[metric].name,
-                            tags: { UUID: newVal },
-                            aggregators: [{
-                                name: this.settings.metrics[metric].aggregator,
-                                sampling: {
-                                    unit: this.settings.metrics[metric].timeBucket,
-                                    value: this.settings.metrics[metric].timeBucketValue
-                                }
-                            }]
-                        })
-                    } else {
-                        this.metrics.push({
-                            name: this.settings.metrics[metric].name,
-                            tags: { UUID: deviceUUID }
-                        })
-                    }
+                    this.metrics.push({
+                        name: this.settings.metrics[metric].name,
+                        tags: { UUID: newVal },
+                        aggregators: this.settings.metrics[metric].timeBucket === "auto" ? [{
+                            name: this.settings.metrics[metric].aggregator,
+                        }] : [{
+                            name: this.settings.metrics[metric].aggregator,
+                            sampling: {
+                                unit: this.settings.metrics[metric].timeBucket,
+                                value: this.settings.metrics[metric].timeBucketValue
+                            }
+                        }]
+                    })
                 }
             } else {
                 for (const metric in this.metrics) {
@@ -84,24 +87,20 @@ var vueInstance = new Vue({
                     settings.deviceid !== null
                 ) {
                     for (const metric in this.settings.metrics) {
-                        if (this.settings.metrics[metric].timeBucket !== "auto") {
-                            this.metrics.push({
-                                name: this.settings.metrics[metric].name,
-                                tags: { UUID: deviceUUID },
-                                aggregators: [{
-                                    name: this.settings.metrics[metric].aggregator,
-                                    sampling: {
-                                        unit: this.settings.metrics[metric].timeBucket,
-                                        value: this.settings.metrics[metric].timeBucketValue
-                                    }
-                                }]
-                            })
-                        } else {
-                            this.metrics.push({
-                                name: this.settings.metrics[metric].name,
-                                tags: { UUID: deviceUUID }
-                            })
-                        }
+                        this.metrics.push({
+                            name: this.settings.metrics[metric].name,
+                            tags: { UUID: deviceUUID },
+                            aggregators: this.settings.metrics[metric].timeBucket === "auto" ? [{
+                                name: this.settings.metrics[metric].aggregator,
+                            }] : [{
+                                name: this.settings.metrics[metric].aggregator,
+                                sampling: {
+                                    unit: this.settings.metrics[metric].timeBucket,
+                                    value: this.settings.metrics[metric].timeBucketValue
+                                }
+                            }]
+                        })
+
                     }
                     this.getData(this.settings, this.metrics);
                 }
@@ -174,7 +173,7 @@ var vueInstance = new Vue({
                     series.dataFields.dateX = "date";
                     series.dataFields.valueY = 'temp';
                     series.strokeWidth = 2;
-                    series.tooltipText = 'Temp: {valueY}';
+                    series.tooltipText = 'Temperature: {valueY}';
                     series.bullets.push(new am4charts.CircleBullet());
 
                     var series2 = chart.series.push(new am4charts.LineSeries());
@@ -194,8 +193,8 @@ var vueInstance = new Vue({
                         );
 
 
-                        data.push({ date: new Date(2021, 0, i + 1), temp: temp });
-                        data.push({ date: new Date(2021, 0, i + 1), humidity: humidity });
+                        //   data.push({ date: new Date(2021, 0, i + 1), temp: temp });
+                        data.push({ date: new Date(2021, 0, i + 1), humidity: humidity, temp: temp });
                     }
 
                     chart.data = data;
@@ -328,11 +327,15 @@ function handleFilterChange(filters) {
 
     if (filters) {
         if (!widgetLevelQueryDevice && filters.tags) {
-            updateDeviceById(filters.tags.deviceId[0], function (err, data) {
-                deviceUUID = data;
-                vueInstance.$emit("updateDeviceUUID", data)
-                vueInstance.$emit("updateData", filters.timerange);
-            });
+            if (deviceId !== filters.tags.deviceId[0]) {
+                deviceId = filters.tags.deviceId[0]
+                updateDeviceById(filters.tags.deviceId[0], function (err, data) {
+                    deviceUUID = data;
+                    vueInstance.$emit("updateDeviceUUID", data)
+                });
+            }
+            vueInstance.$emit("updateData", filters.timerange);
+
         } else if (!widgetLevelQueryTime && widgetLevelQueryDevice) {
             vueInstance.$emit("updateData", filters.timerange);
         }
