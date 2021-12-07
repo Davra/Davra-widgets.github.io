@@ -171,7 +171,6 @@ var vueInstance = new Vue({
 
         if (previewMode === true) {
           var data = [];
-          var humidity = 10;
           var temp = 10
 
           var series = chart.series.push(new am4charts.LineSeries());
@@ -181,25 +180,13 @@ var vueInstance = new Vue({
           series.tooltipText = 'Temperature: {valueY}';
           series.bullets.push(new am4charts.CircleBullet());
 
-          var series2 = chart.series.push(new am4charts.LineSeries());
-          series2.dataFields.dateX = "date";
-          series2.dataFields.valueY = 'humidity';
-          series2.strokeWidth = 2;
-          series2.tooltipText = 'Humidity: {valueY}';
-          series2.bullets.push(new am4charts.CircleBullet());
 
           for (var i = 0; i < 100; i++) {
             temp += Math.round(
               (Math.random() < 0.5 ? 1 : -1) * Math.random() * 10
             );
 
-            humidity += Math.round(
-              (Math.random() < 0.5 ? 1 : -1) * Math.random() * 10
-            );
-
-
-            //   data.push({ date: new Date(2021, 0, i + 1), temp: temp });
-            data.push({ date: new Date(2021, 0, i + 1), humidity: humidity, temp: temp });
+            data.push({ date: new Date(2021, 0, i + 1), temp: temp });
           }
 
           chart.data = data;
