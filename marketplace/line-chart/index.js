@@ -1,4 +1,5 @@
 var deviceUUID;
+var deviceId;
 var previewMode = false;
 var widgetLevelQueryDevice = false;
 var widgetLevelQueryTime = false;
@@ -19,39 +20,66 @@ var vueInstance = new Vue({
     chart: null,
     chartData: [],
     label: null,
+    metrics: [],
+    activeSeries: []
   },
   watch: {
     dataPoints(newVal, oldVal) {
-      if (newVal.length === 0) {
+      if (newVal === {}) {
         this.chart.data = [];
         this.label.text = "No Data Available";
       } else if (newVal !== oldVal) {
         this.chartData = [];
         var value = 0;
-        var previousValue;
-
-        for (const point in newVal) {
-          value = newVal[point][1];
-
-          if (point > 0) {
-            // add color to previous data item depending on whether current value is less or more than previous value
-            if (previousValue <= value) {
-              this.chartData[point - 1].color = this.chart.colors.getIndex(0);
+        var seenDates = [];
+        var keys = Object.keys(newVal);
+        for (const key in keys) {
+          if (!this.activeSeries.includes(keys[key])) {
+            this.addSeries(keys[key])
+          }
+          for (const point in newVal[keys[key]]) {
+            value = newVal[keys[key]][point][1];
+            if (seenDates.includes(newVal[keys[key]][point][0])) {
+              let existingObj = this.chartData.find(o => o.date == newVal[keys[key]][point][0]);
+              existingObj[keys[key]] = value
             } else {
-              this.chartData[point - 1].color = this.chart.colors.getIndex(5);
+              seenDates.push(newVal[keys[key]][point][0])
+              var obj = {}
+              obj['date'] = newVal[keys[key]][point][0]
+              obj[keys[key]] = value
+              this.chartData.push(obj);
             }
           }
-
-          this.chartData.push({
-            date: new Date(newVal[point][0]),
-            value: value,
-          });
-          previousValue = value;
         }
         this.label.text = "";
         this.chart.data = this.chartData;
       }
     },
+    deviceUUID(newVal, oldVal) {
+      if (this.metrics.length === 0) {
+        for (const metric in this.settings.metrics) {
+          this.metrics.push({
+            name: this.settings.metrics[metric].name,
+            tags: { UUID: newVal },
+            group_by: this.settings.metrics[metric].dimensions !== undefined && this.settings.metrics[metric].dimensions.length > 0 ? [{ name: "tag", tags: this.settings.metrics[metric].dimensions }] : [],
+            aggregators: this.settings.metrics[metric].timeBucket === "auto" ? [{
+              name: this.settings.metrics[metric].aggregator
+            }] : [{
+              name: this.settings.metrics[metric].aggregator,
+              sampling: {
+                unit: this.settings.metrics[metric].timeBucket,
+                value: this.settings.metrics[metric].timeBucketValue
+              }
+            }]
+          })
+        }
+      } else {
+        for (const metric in this.metrics) {
+          this.metrics[metric].tags.UUID = newVal
+        }
+      }
+
+    }
   },
   mounted() {
     this.$on("update", function (settings) {
@@ -59,11 +87,26 @@ var vueInstance = new Vue({
       this.widgetConfig = widgetConfig;
       if (settings.deviceId !== null || settings.metrics !== null) {
         if (
-          settings.timerange &&
-          settings.metric &&
-          settings.deviceid !== null
+          settings.metric
         ) {
-          this.getData(this.settings);
+          for (const metric in this.settings.metrics) {
+            this.metrics.push({
+              name: this.settings.metrics[metric].name,
+              tags: settings.deviceId !== null ? { UUID: deviceUUID } : {},
+              group_by: this.settings.metrics[metric].dimensions !== undefined && this.settings.metrics[metric].dimensions.length > 0 ? [{ name: "tag", tags: this.settings.metrics[metric].dimensions }] : [],
+              aggregators: this.settings.metrics[metric].timeBucket === "auto" ? [{
+                name: this.settings.metrics[metric].aggregator
+              }] : [{
+                name: this.settings.metrics[metric].aggregator,
+                sampling: {
+                  unit: this.settings.metrics[metric].timeBucket,
+                  value: this.settings.metrics[metric].timeBucketValue
+                }
+              }]
+            })
+
+          }
+          this.getData(this.settings, this.metrics);
         }
       } else {
         previewMode = true;
@@ -73,8 +116,10 @@ var vueInstance = new Vue({
     });
 
     this.$on("updateData", function (timerange) {
-      console.log(timerange);
       this.getNewData(timerange);
+    });
+    this.$on("updateDeviceUUID", function (uuid) {
+      this.deviceUUID = uuid;
     });
   },
 
@@ -109,38 +154,12 @@ var vueInstance = new Vue({
             ? self.settings.fontsize
             : self.widgetConfig.fontsize;
 
-        if (previewMode === true) {
-          var data = [];
-          var visits = 10;
-          var previousValue;
-
-          for (var i = 0; i < 100; i++) {
-            visits += Math.round(
-              (Math.random() < 0.5 ? 1 : -1) * Math.random() * 10
-            );
-
-            if (i > 0) {
-              // add color to previous data item depending on whether current value is less or more than previous value
-              if (previousValue <= visits) {
-                data[i - 1].color = chart.colors.getIndex(0);
-              } else {
-                data[i - 1].color = chart.colors.getIndex(5);
-              }
-            }
-
-            data.push({ date: new Date(2021, 0, i + 1), value: visits });
-            previousValue = visits;
-          }
-
-          chart.data = data;
-        } else {
-          chart.data = self.chartData;
-        }
 
         var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
         dateAxis.renderer.grid.template.location = 0;
         dateAxis.renderer.axisFills.template.disabled = true;
         dateAxis.renderer.ticks.template.disabled = true;
+        dateAxis.tooltip.disabled = true
         dateAxis.fontSize = fontsize;
 
         var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
@@ -150,12 +169,43 @@ var vueInstance = new Vue({
         valueAxis.renderer.ticks.template.disabled = true;
         valueAxis.fontSize = fontsize;
 
-        var series = chart.series.push(new am4charts.LineSeries());
-        series.dataFields.dateX = "date";
-        series.dataFields.valueY = "value";
-        series.strokeWidth = 2;
-        series.tooltipText = "Value: {valueY}, Change: {valueY.previousChange}";
-        series.bullets.push(new am4charts.CircleBullet());
+        if (previewMode === true) {
+          var data = [];
+          var humidity = 10;
+          var temp = 10
+
+          var series = chart.series.push(new am4charts.LineSeries());
+          series.dataFields.dateX = "date";
+          series.dataFields.valueY = 'temp';
+          series.strokeWidth = 2;
+          series.tooltipText = 'Temperature: {valueY}';
+          series.bullets.push(new am4charts.CircleBullet());
+
+          var series2 = chart.series.push(new am4charts.LineSeries());
+          series2.dataFields.dateX = "date";
+          series2.dataFields.valueY = 'humidity';
+          series2.strokeWidth = 2;
+          series2.tooltipText = 'Humidity: {valueY}';
+          series2.bullets.push(new am4charts.CircleBullet());
+
+          for (var i = 0; i < 100; i++) {
+            temp += Math.round(
+              (Math.random() < 0.5 ? 1 : -1) * Math.random() * 10
+            );
+
+            humidity += Math.round(
+              (Math.random() < 0.5 ? 1 : -1) * Math.random() * 10
+            );
+
+
+            //   data.push({ date: new Date(2021, 0, i + 1), temp: temp });
+            data.push({ date: new Date(2021, 0, i + 1), humidity: humidity, temp: temp });
+          }
+
+          chart.data = data;
+        } else {
+          chart.data = self.chartData;
+        }
 
         var label = chart.createChild(am4core.Label);
         label.align = "center";
@@ -168,38 +218,34 @@ var vueInstance = new Vue({
           label.text = "No Data Available";
         }
 
-        // set stroke property field
-        series.propertyFields.stroke = "color";
 
         chart.cursor = new am4charts.XYCursor();
 
         var scrollbarX = new am4core.Scrollbar();
         chart.scrollbarX = scrollbarX;
 
-        dateAxis.start = 0.7;
+        chart.legend = new am4charts.Legend();
+        chart.legend.useDefaultMarker = true;
+
         dateAxis.keepSelection = true;
         self.chart = chart;
         self.label = label;
       }); // end am4core.ready()
     },
 
-    getData(settings) {
+    addSeries(name) {
+      var series = this.chart.series.push(new am4charts.LineSeries());
+      series.dataFields.dateX = "date";
+      series.dataFields.valueY = name;
+      series.strokeWidth = 2;
+      series.bullets.push(new am4charts.CircleBullet());
+      series.tooltipText = `${name}: {valueY}`;
+      this.activeSeries.push(name);
+    },
+
+    getData(settings, metrics) {
       var query = {
-        metrics: [
-          {
-            name: settings.metric,
-            tags: { UUID: deviceUUID },
-            aggregators: settings.metrics[0].timeBucket === "auto" ? [{
-                            name: settings.metrics[0].aggregator,
-                        }] : [{
-                            name: settings.metrics[0].aggregator,
-                            sampling: {
-                                unit: settings.metrics[0].timeBucket,
-                                value: settings.metrics[0].timeBucketValue
-                            }
-                        }]
-          },
-        ],
+        metrics: metrics,
         start_absolute: settings.timerange.startTime,
         end_absolute: settings.timerange.endTime,
       };
@@ -214,28 +260,23 @@ var vueInstance = new Vue({
         .then(function (response) {
           return response.json();
         })
-        .then((res) => {
-          this.dataPoints = res.queries[0].results[0].values;
-          console.log(this.dataPoints);
+        .then(async (res) => {
+          var data = {};
+          for (const result in res.queries) {
+            if (res.queries[result].results.length > 0 && res.queries[result].results[0].group_by.length <= 1) {
+              data[res.queries[result].results[0].name] = res.queries[result].results[0].values;
+            } else if (res.queries[result].results.length >= 1) {
+              for (const index in res.queries[result].results) {
+                data[res.queries[result].results[index].name + "-" + await this.getDeviceName(res.queries[result].results[index].tags.UUID[0])] = res.queries[result].results[index].values;
+              }
+            }
+          }
+          this.dataPoints = data;
         });
     },
     getNewData(timerange) {
       var query = {
-        metrics: [
-          {
-            name: this.settings.metric,
-            tags: { UUID: deviceUUID },
-            aggregators: this.settings.metrics[0].timeBucket === "auto" ? [{
-                            name: this.settings.metrics[0].aggregator,
-                        }] : [{
-                            name: this.settings.metrics[0].aggregator,
-                            sampling: {
-                                unit: this.settings.metrics[0].timeBucket,
-                                value: this.settings.metrics[0].timeBucketValue
-                            }
-                        }]
-          },
-        ],
+        metrics: this.metrics,
         start_absolute: timerange.startTime,
         end_absolute: timerange.endTime,
       };
@@ -250,9 +291,35 @@ var vueInstance = new Vue({
         .then(function (response) {
           return response.json();
         })
+        .then(async (res) => {
+          var data = {};
+          for (const result in res.queries) {
+            if (res.queries[result].results[0].group_by !== undefined) {
+              if (res.queries[result].results.length > 0 && res.queries[result].results[0].group_by.length <= 1) {
+                data[res.queries[result].results[0].name] = res.queries[result].results[0].values;
+              } else if (res.queries[result].results.length >= 1) {
+                for (const index in res.queries[result].results) {
+                  data[res.queries[result].results[index].name + "-" + await this.getDeviceName(res.queries[result].results[index].tags.UUID[0])] = res.queries[result].results[index].values;
+                }
+              }
+            }
+          }
+          this.dataPoints = data;
+        });
+    },
+    getDeviceName(uuid) {
+      return fetch(`/api/v1/devices/${uuid}`, {
+        method: "GET",
+        processData: true,
+        headers: {
+          "Content-type": "application/json",
+        },
+      })
+        .then(function (response) {
+          return response.json();
+        })
         .then((res) => {
-          this.dataPoints = res.queries[0].results[0].values;
-          console.log(this.dataPoints);
+          return res.records[0].name
         });
     },
   },
@@ -282,6 +349,10 @@ function connecthingWidgetInit(context) {
         } else {
           widgetLevelQueryDevice = false;
           widgetLevelQueryTime = false;
+          widgetConfigData.timerange = {
+            startTime: moment().subtract(24, "hours").valueOf(),
+            endTime: moment().valueOf(),
+          }
           vueInstance.$emit("update", widgetConfigData);
         }
       }
@@ -294,11 +365,18 @@ function handleFilterChange(filters) {
 
   if (filters) {
     if (!widgetLevelQueryDevice && filters.tags) {
-      updateDeviceById(filters.tags.deviceId[0], function (err, data) {
-        deviceUUID = data;
-        vueInstance.$emit("updateData", filters.timerange);
-      });
+      if (deviceId !== filters.tags.deviceId[0]) {
+        deviceId = filters.tags.deviceId[0]
+        updateDeviceById(filters.tags.deviceId[0], function (err, data) {
+          deviceUUID = data;
+          vueInstance.$emit("updateDeviceUUID", data)
+        });
+      }
+      vueInstance.$emit("updateData", filters.timerange);
+
     } else if (!widgetLevelQueryTime && widgetLevelQueryDevice) {
+      vueInstance.$emit("updateData", filters.timerange);
+    } else {
       vueInstance.$emit("updateData", filters.timerange);
     }
   }

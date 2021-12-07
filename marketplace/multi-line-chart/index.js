@@ -8,7 +8,7 @@ var widgetConfig = {
     theme: undefined,
     fontSize: 30,
     chartHeight: 500,
-}; 
+};
 
 var vueInstance = new Vue({
     el: "#main",
@@ -23,7 +23,7 @@ var vueInstance = new Vue({
         metrics: [],
         activeSeries: []
     },
-    watch: { 
+    watch: {
         dataPoints(newVal, oldVal) {
             if (newVal === {}) {
                 this.chart.data = [];
@@ -34,7 +34,7 @@ var vueInstance = new Vue({
                 var seenDates = [];
                 var keys = Object.keys(newVal);
                 for (const key in keys) {
-                    if(!this.activeSeries.includes(keys[key])){
+                    if (!this.activeSeries.includes(keys[key])) {
                         this.addSeries(keys[key])
                     }
                     for (const point in newVal[keys[key]]) {
@@ -61,7 +61,7 @@ var vueInstance = new Vue({
                     this.metrics.push({
                         name: this.settings.metrics[metric].name,
                         tags: { UUID: newVal },
-                        group_by: this.settings.metrics[metric].dimensions !== undefined && this.settings.metrics[metric].dimensions.length > 0 ? [{ name: "tag", tags: this.settings.metrics[metric].dimensions}] : [],
+                        group_by: this.settings.metrics[metric].dimensions !== undefined && this.settings.metrics[metric].dimensions.length > 0 ? [{ name: "tag", tags: this.settings.metrics[metric].dimensions }] : [],
                         aggregators: this.settings.metrics[metric].timeBucket === "auto" ? [{
                             name: this.settings.metrics[metric].aggregator
                         }] : [{
@@ -74,7 +74,7 @@ var vueInstance = new Vue({
                     })
                 }
             } else {
-                for (const metric in this.metrics) { 
+                for (const metric in this.metrics) {
                     this.metrics[metric].tags.UUID = newVal
                 }
             }
@@ -93,7 +93,7 @@ var vueInstance = new Vue({
                         this.metrics.push({
                             name: this.settings.metrics[metric].name,
                             tags: settings.deviceId !== null ? { UUID: deviceUUID } : {},
-                            group_by: this.settings.metrics[metric].dimensions !== undefined && this.settings.metrics[metric].dimensions.length > 0 ? [{ name: "tag", tags: this.settings.metrics[metric].dimensions}] : [],
+                            group_by: this.settings.metrics[metric].dimensions !== undefined && this.settings.metrics[metric].dimensions.length > 0 ? [{ name: "tag", tags: this.settings.metrics[metric].dimensions }] : [],
                             aggregators: this.settings.metrics[metric].timeBucket === "auto" ? [{
                                 name: this.settings.metrics[metric].aggregator
                             }] : [{
@@ -211,7 +211,7 @@ var vueInstance = new Vue({
                 label.align = "center";
                 label.fontSize = fontsize;
 
-                if ( 
+                if (
                     !previewMode &&
                     (self.dataPoints === null || self.dataPoints === [])
                 ) {
@@ -223,7 +223,7 @@ var vueInstance = new Vue({
 
                 var scrollbarX = new am4core.Scrollbar();
                 chart.scrollbarX = scrollbarX;
-                
+
                 chart.legend = new am4charts.Legend();
                 chart.legend.useDefaultMarker = true;
 
@@ -232,14 +232,14 @@ var vueInstance = new Vue({
                 self.label = label;
             }); // end am4core.ready()
         },
-        
-        addSeries(name){
+
+        addSeries(name) {
             var series = this.chart.series.push(new am4charts.LineSeries());
             series.dataFields.dateX = "date";
             series.dataFields.valueY = name;
             series.strokeWidth = 2;
             series.bullets.push(new am4charts.CircleBullet());
-             series.tooltipText = `${name}: {valueY}`;
+            series.tooltipText = `${name}: {valueY}`;
             this.activeSeries.push(name);
         },
 
@@ -263,24 +263,22 @@ var vueInstance = new Vue({
                 .then(async (res) => {
                     var data = {};
                     for (const result in res.queries) {
-                        console.log(res.queries[result])
-                          if(res.queries[result].results.length > 0 && res.queries[result].results[0].group_by.length <= 1){
+                        if (res.queries[result].results.length > 0 && res.queries[result].results[0].group_by.length <= 1) {
                             data[res.queries[result].results[0].name] = res.queries[result].results[0].values;
-                          }else if(res.queries[result].results.length >= 1){
-                              for (const index in res.queries[result].results){
-                                  data[res.queries[result].results[index].name + "-" + await this.getDeviceName(res.queries[result].results[index].tags.UUID[0])] = res.queries[result].results[index].values;
-                              }
-                          } 
+                        } else if (res.queries[result].results.length >= 1) {
+                            for (const index in res.queries[result].results) {
+                                data[res.queries[result].results[index].name + "-" + await this.getDeviceName(res.queries[result].results[index].tags.UUID[0])] = res.queries[result].results[index].values;
+                            }
+                        }
                     }
                     this.dataPoints = data;
-                    console.log(this.dataPoints);
                 });
         },
         getNewData(timerange) {
             var query = {
                 metrics: this.metrics,
                 start_absolute: timerange.startTime,
-                end_absolute: timerange.endTime, 
+                end_absolute: timerange.endTime,
             };
             return fetch("/api/v2/timeseriesData", {
                 method: "POST",
@@ -296,17 +294,17 @@ var vueInstance = new Vue({
                 .then(async (res) => {
                     var data = {};
                     for (const result in res.queries) {
-                          if(res.queries[result].results.length > 0 && res.queries[result].results[0].group_by.length <= 1){
-                            data[res.queries[result].results[0].name] = res.queries[result].results[0].values;
-                          }else if(res.queries[result].results.length >= 1){
-                              for (const index in res.queries[result].results){
-                                  
-                                  data[res.queries[result].results[index].name + "-" + await this.getDeviceName(res.queries[result].results[index].tags.UUID[0])] = res.queries[result].results[index].values;
-                              }
-                          } 
+                        if (res.queries[result].results[0].group_by !== undefined) {
+                            if (res.queries[result].results.length > 0 && res.queries[result].results[0].group_by.length <= 1) {
+                                data[res.queries[result].results[0].name] = res.queries[result].results[0].values;
+                            } else if (res.queries[result].results.length >= 1) {
+                                for (const index in res.queries[result].results) {
+                                    data[res.queries[result].results[index].name + "-" + await this.getDeviceName(res.queries[result].results[index].tags.UUID[0])] = res.queries[result].results[index].values;
+                                }
+                            }
+                        }
                     }
                     this.dataPoints = data;
-                    console.log(this.dataPoints);
                 });
         },
         getDeviceName(uuid) {
@@ -352,9 +350,9 @@ function connecthingWidgetInit(context) {
                     widgetLevelQueryDevice = false;
                     widgetLevelQueryTime = false;
                     widgetConfigData.timerange = {
-                            startTime: moment().subtract(24, "hours").valueOf(),
-                            endTime: moment().valueOf(),
-                        }
+                        startTime: moment().subtract(24, "hours").valueOf(),
+                        endTime: moment().valueOf(),
+                    }
                     vueInstance.$emit("update", widgetConfigData);
                 }
             }
@@ -378,7 +376,7 @@ function handleFilterChange(filters) {
 
         } else if (!widgetLevelQueryTime && widgetLevelQueryDevice) {
             vueInstance.$emit("updateData", filters.timerange);
-        }else{
+        } else {
             vueInstance.$emit("updateData", filters.timerange);
         }
     }
@@ -402,7 +400,7 @@ function updateDeviceById(id, callback) {
                     callback(null, data.records[0].UUID);
                 }
             }
-        }, 
+        },
     });
 }
 
