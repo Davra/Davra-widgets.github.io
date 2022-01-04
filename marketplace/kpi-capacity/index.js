@@ -143,9 +143,10 @@ var vueInstance = new Vue({
                 waves.width = Math.max(component.pixelWidth, component.pixelHeight);
 
                 //capacityLabel.y = radius;
+                
 
                 var labelRadius = radius + 20;
-
+                
                 capacityLabel.path =
                     am4core.path.moveTo({ x: -labelRadius, y: 0 }) +
                     am4core.path.arcToPoint(
@@ -154,12 +155,12 @@ var vueInstance = new Vue({
                         labelRadius
                     );
                 capacityLabel.locationOnPath = 0.5;
+                if (previewMode === true) {
+                    setValue(value);
+                }
             });
-            if (previewMode === true) {
-                setValue(value);
-            }
 
-            var setValue = function (value) {
+            function setValue(value) {
                 var y =
                     -circle.radius -
                     waves.waveHeight +
