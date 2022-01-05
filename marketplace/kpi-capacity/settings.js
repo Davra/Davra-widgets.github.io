@@ -3,13 +3,13 @@ var selectedfont;
 var selectedIcon;
 var selectedTheme;
 var themesObject = {
-  Default: "am4themes_animated",
-  "Red/Navy": "am4themes_dataviz",
-  "Pink/Orange": "am4themes_material",
-  "Yellow/Purple": "am4themes_kelly",
-  Lilac: "am4themes_frozen",
-  Brown: "am4themes_moonrisekingdom",
-  Grey: "am4themes_spiritedaway",
+  Default: "#34a4eb",
+  "Red": "#fc0303",
+  "Pink": "#fc03db",
+  "Yellow": "#fcba03",
+  "Purple": "#8003fc",
+  "Brown": "#420e0e",
+  "Black": "#000000",
 };
 
 var vueInstance = new Vue({
@@ -26,21 +26,21 @@ var vueInstance = new Vue({
     circleSizes: [0.2,0.4,0.6,0.8,1.0],
     themes: [
       "Default",
-      "Red/Navy",
-      "Pink/Orange",
-      "Yellow/Purple",
-      "Lilac",
+      "Red",
+      "Pink",
+      "Yellow",
+      "Purple",
       "Brown",
-      "Grey",
+      "Black",
     ],
     themesObj: {
-      Default: "am4themes_animated",
-      "Red/Navy": "am4themes_dataviz",
-      "Pink/Orange": "am4themes_material",
-      "Yellow/Purple": "am4themes_kelly",
-      Lilac: "am4themes_frozen",
-      Brown: "am4themes_moonrisekingdom",
-      Grey: "am4themes_spiritedaway",
+      Default: "#34a4eb",
+      "Red": "#fc0303",
+      "Pink": "#fc03db",
+      "Yellow": "#fcba03",
+      "Purple": "#8003fc",
+      "Brown": "#420e0e",
+      "Black": "#000000",
     },
   },
   watch: {

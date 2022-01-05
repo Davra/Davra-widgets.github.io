@@ -4,15 +4,12 @@ var widgetLevelQueryDevice = false;
 var widgetLevelQueryTime = false;
 
 var widgetConfig = {
-    colorTheme: null,
     fontSize: 30,
     unit: "Litres",
     capacity: 6000,
     circleSize: 0.8,
     chartHeight: 500,
 };
-
-var sampleData = [[163434340, 6969]];
 
 var vueInstance = new Vue({
     el: "#main",
@@ -38,14 +35,17 @@ var vueInstance = new Vue({
                     : this.widgetConfig.unit;
             if (newVal.length === 0) {
                 this.label.text = "No Data Available";
+                this.label2.text = ""
+                this.setValue(capacity - capacity);
             } else {
-                this.setValue(newVal[0][1]);
-
                 if (newVal[0][0] === 0) {
                     this.label.text = "No Data Available";
+                    this.label2.text = ""
+                    this.setValue(capacity - capacity);
                 } else {
                     this.label.text = newVal[0][1] + " " + unit;
                     this.label2.text = new Date(newVal[0][0]).toString();
+                    this.setValue(newVal[0][1]);
                 }
             }
         },
@@ -83,10 +83,10 @@ var vueInstance = new Vue({
             var theme =
                 self.settings.theme !== undefined
                     ? self.settings.theme
-                    : "am4themes_animated";
+                    : "#34a4eb";
 
             // Themes begin
-            am4core.useTheme(window[theme]);
+            am4core.useTheme(am4themes_animated);
             am4core.addLicense("ch-custom-attribution");
             // Themes end
 
@@ -125,7 +125,7 @@ var vueInstance = new Vue({
             var circleMask = chartContainer.createChild(am4core.Circle);
 
             var waves = chartContainer.createChild(am4core.WavedRectangle);
-            waves.fill = am4core.color("#34a4eb");
+            waves.fill = am4core.color(theme);
             waves.mask = circleMask;
             waves.horizontalCenter = "middle";
             waves.waveHeight = 10;
@@ -143,10 +143,10 @@ var vueInstance = new Vue({
                 waves.width = Math.max(component.pixelWidth, component.pixelHeight);
 
                 //capacityLabel.y = radius;
-                
+
 
                 var labelRadius = radius + 20;
-                
+
                 capacityLabel.path =
                     am4core.path.moveTo({ x: -labelRadius, y: 0 }) +
                     am4core.path.arcToPoint(
@@ -190,13 +190,13 @@ var vueInstance = new Vue({
 
             label.text = formattedValue + " " + unit;
             label.fill = am4core.color("#fff");
-            label.fontSize = 30;
+            label.fontSize = fontsize;
             label.horizontalCenter = "middle";
 
             var label2 = chartContainer.createChild(am4core.Label);
 
             label2.fill = am4core.color("#fff");
-            label2.fontSize = 15;
+            label2.fontSize = fontsize * 0.333;
             label2.horizontalCenter = "middle";
             label2.verticalCenter = "middle";
 
@@ -207,8 +207,8 @@ var vueInstance = new Vue({
                 .toUpperCase();
 
             capacityLabel.text = "Capacity " + formattedCapacity + " " + unit;
-            capacityLabel.fill = am4core.color("#34a4eb");
-            capacityLabel.fontSize = 20;
+            capacityLabel.fill = am4core.color(theme);
+            capacityLabel.fontSize = fontsize * 0.666;
             capacityLabel.textAlign = "middle";
             capacityLabel.padding(0, 0, 0, 0);
 
@@ -302,6 +302,10 @@ function connecthingWidgetInit(context) {
                 } else {
                     widgetLevelQueryDevice = false;
                     widgetLevelQueryTime = false;
+                    widgetConfigData.timerange = {
+                        startTime: moment().subtract(24, "hours").valueOf(),
+                        endTime: moment().valueOf(),
+                    };
                     vueInstance.$emit("update", widgetConfigData);
                 }
             }
