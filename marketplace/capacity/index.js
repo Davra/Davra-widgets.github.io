@@ -357,7 +357,7 @@ function checkPreviewMode() {
 
     if (
         queryString ===
-        "https://davra.github.io/marketplace/kpi-capacity/index.html"
+        "https://davra.github.io/marketplace/capacity/index.html"
     ) {
         previewMode = true;
         vueInstance.$emit("update", {
