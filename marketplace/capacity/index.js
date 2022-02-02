@@ -87,7 +87,7 @@ var vueInstance = new Vue({
 
             // Themes begin
             am4core.useTheme(am4themes_animated);
-            am4core.addLicense("ch-custom-attribution");
+            am4core.options.commercialLicense = true;
             // Themes end
 
             var capacity =

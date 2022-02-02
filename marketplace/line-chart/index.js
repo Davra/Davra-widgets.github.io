@@ -134,7 +134,7 @@ var vueInstance = new Vue({
 
         // Themes begin
         am4core.useTheme(window[theme]);
-        am4core.addLicense("ch-custom-attribution");
+        am4core.options.commercialLicense = true;
         // Themes end
 
         // Create chart instance
