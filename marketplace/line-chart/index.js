@@ -396,14 +396,9 @@ checkPreviewMode();
 function checkPreviewMode() {
   const queryString = window.location.href;
 
-  if (
-    queryString === "https://davra.github.io/marketplace/line-chart/index.html"
-  ) {
+  if (queryString === "https://davra.github.io/marketplace/line-chart/index.html" || queryString.substring(queryString.length-19,queryString.length) !== "context=connecthing") {
     previewMode = true;
-    vueInstance.$emit("update", {
-      deviceId: null,
-      metrics: null,
-      timerange: null,
-    });
+    vueInstance.$emit('update', { deviceId: null, metrics: null, timerange: null, chartCfg: null });
   }
+
 }
