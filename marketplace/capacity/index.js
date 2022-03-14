@@ -354,16 +354,10 @@ checkPreviewMode();
 
 function checkPreviewMode() {
     const queryString = window.location.href;
-
-    if (
-        queryString ===
-        "https://davra.github.io/marketplace/capacity/index.html"
-    ) {
-        previewMode = true;
-        vueInstance.$emit("update", {
-            deviceId: null,
-            metrics: null,
-            timerange: null,
-        });
+  
+    if (queryString === "https://davra.github.io/marketplace/capacity/index.html" || queryString.substring(queryString.length-19,queryString.length) !== "context=connecthing") {
+      previewMode = true;
+      vueInstance.$emit('update', { deviceId: null, metrics: null, timerange: null, chartCfg: null });
     }
-}
+  
+  }
