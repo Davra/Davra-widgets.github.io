@@ -36,12 +36,12 @@ var vueInstance = new Vue({
             if (newVal.length === 0) {
                 this.label.text = "No Data Available";
                 this.label2.text = ""
-                this.setValue(capacity - capacity);
+                this.setValue(0);
             } else {
                 if (newVal[0][0] === 0) {
                     this.label.text = "No Data Available";
                     this.label2.text = ""
-                    this.setValue(capacity - capacity);
+                    this.setValue(0);
                 } else {
                     this.label.text = newVal[0][1] + " " + unit;
                     this.label2.text = new Date(newVal[0][0]).toString();
@@ -279,53 +279,49 @@ var vueInstance = new Vue({
 });
 
 function connecthingWidgetInit(context) {
-    context.filters.subscribe(handleFilterChange);
+  context.filters.subscribe(handleFilterChange);
 
-    widgetUtils.loadWidgetSettings(function (err, widgetConfigData) {
-        if (err === undefined || err === null) {
-            if (widgetConfigData !== undefined) {
-                if (widgetConfigData.deviceId != null) {
-                    widgetLevelQueryDevice = true;
-                    if (widgetConfigData.timerange != null) {
-                        widgetLevelQueryTime = true;
-                    } else {
-                        widgetLevelQueryTime = false;
-                        widgetConfigData.timerange = {
-                            startTime: moment().subtract(24, "hours").valueOf(),
-                            endTime: moment().valueOf(),
-                        };
-                    }
-                    updateDeviceById(widgetConfigData.deviceId, function (err, data) {
-                        deviceUUID = data;
-                        vueInstance.$emit("update", widgetConfigData);
-                    });
-                } else {
-                    widgetLevelQueryDevice = false;
-                    widgetLevelQueryTime = false;
-                    widgetConfigData.timerange = {
-                        startTime: moment().subtract(24, "hours").valueOf(),
-                        endTime: moment().valueOf(),
-                    };
-                    vueInstance.$emit("update", widgetConfigData);
-                }
-            }
+  widgetUtils.loadWidgetSettings(function (err, widgetConfigData) {
+    if (err === undefined || err === null) {
+      if (widgetConfigData !== undefined) {
+        if (widgetConfigData.deviceId != null) {
+          widgetLevelQueryDevice = true;
+          if (widgetConfigData.timerange != null) {
+            widgetLevelQueryTime = true;
+          } else {
+            widgetLevelQueryTime = false;
+            widgetConfigData.timerange = {
+              startTime: moment().subtract(24, "hours").valueOf(),
+              endTime: moment().valueOf(),
+            };
+          }
+          updateDeviceById(widgetConfigData.deviceId, function (err, data) {
+            deviceUUID = data;
+            vueInstance.$emit("update", widgetConfigData);
+          });
+        } else {
+          widgetLevelQueryDevice = false;
+          widgetLevelQueryTime = false;
+          vueInstance.$emit("update", widgetConfigData);
         }
-    });
+      }
+    }
+  });
 }
 
 function handleFilterChange(filters) {
-    previewMode = false;
+  previewMode = false;
 
-    if (filters) {
-        if (!widgetLevelQueryDevice && filters.tags) {
-            updateDeviceById(filters.tags.deviceId[0], function (err, data) {
-                deviceUUID = data;
-                vueInstance.$emit("updateData", filters.timerange);
-            });
-        } else if (!widgetLevelQueryTime && widgetLevelQueryDevice) {
-            vueInstance.$emit("updateData", filters.timerange);
-        }
+  if (filters) {
+    if (!widgetLevelQueryDevice && filters.tags) {
+      updateDeviceById(filters.tags.deviceId[0], function (err, data) {
+        deviceUUID = data;
+        vueInstance.$emit("updateData", filters.timerange);
+      });
+    } else if (!widgetLevelQueryTime && widgetLevelQueryDevice) {
+      vueInstance.$emit("updateData", filters.timerange);
     }
+  }
 }
 
 function updateDeviceById(id, callback) {
